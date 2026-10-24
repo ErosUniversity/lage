@@ -60,7 +60,7 @@ html.unc-js body[data-versions]::before { display: none; }
   transition: opacity 0.3s ease;
 }
 .unc-loader svg { width: min(320px, 64vw); height: auto; overflow: visible; }
-.unc-shadow { color: #81d8d0; opacity: 0; transition: opacity 0.25s ease, color 0.3s ease; }
+.unc-shadow { color: #81d8d0; opacity: 0; transition: opacity 0.25s ease, color 0.3s ease; transform-box: fill-box; transform-origin: center; }
 .unc-shadow.unc-left { opacity: 1; }
 .unc-shadow.unc-ink { color: #111; }
 .unc-horn { transition: opacity 0.2s ease; }
