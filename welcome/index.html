@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lage · Welcome</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&display=swap">
+  <style>
+    :root {
+      --paper: #fff;
+      --ink: #0d0d0d;
+      --muted: #6b6b6b;
+      --faint: #a3a3a3;
+      --line: #ececec;
+      --flash: #fff6c2;
+      --good: #128a43;
+      --serif: "Instrument Serif", Georgia, serif;
+      --sans: "Inter", system-ui, -apple-system, sans-serif;
+      color-scheme: light;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; min-height: 100%; }
+    body {
+      font-family: var(--sans);
+      color: var(--ink);
+      background: var(--paper);
+      font-size: 15px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+    button, input { font: inherit; color: inherit; }
+    button { cursor: pointer; }
+    a { color: inherit; }
+    :focus { outline: none; }
+    :focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; border-radius: 6px; }
+    .sr {
+      position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+      overflow: hidden; clip: rect(0, 0, 0, 0); border: 0;
+    }
+
+    .top {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 18px 32px;
+    }
+    .mark { font: italic 400 26px/1 var(--serif); text-decoration: none; }
+    .crumb { font-size: 13px; color: var(--muted); }
+    .mode { display: flex; gap: 2px; margin-left: auto; padding: 3px; border: 1px solid var(--line); border-radius: 999px; }
+    .mode button { white-space: nowrap; border: 0; border-radius: 999px; background: none; padding: 5px 12px; font-size: 13px; color: var(--muted); }
+    .mode button[aria-selected="true"] { background: var(--ink); color: var(--paper); }
+
+    .hero { max-width: 1240px; margin: 0 auto; padding: 48px 32px 36px; }
+    .hero h1 {
+      margin: 0;
+      font: 400 clamp(46px, 8.5vw, 112px)/0.95 var(--serif);
+      letter-spacing: -0.025em;
+    }
+    .hero h1 .name { font-style: italic; white-space: nowrap; }
+    .caret {
+      display: inline-block;
+      width: 0.06em;
+      height: 0.8em;
+      margin-left: 0.04em;
+      background: var(--ink);
+      vertical-align: -0.04em;
+      animation: blink 1s steps(1) infinite;
+    }
+    .locked .caret { display: none; }
+    @keyframes blink { 50% { opacity: 0; } }
+    .lede { max-width: 46ch; margin: 22px 0 0; font-size: 17px; color: var(--muted); }
+
+    .desk {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 360px;
+      gap: 32px;
+      align-items: start;
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 0 32px 56px;
+    }
+
+    /* the white paper */
+    .paper {
+      display: flex;
+      flex-direction: column;
+      min-height: 620px;
+      padding: 30px 40px 26px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04), 0 18px 50px rgba(0, 0, 0, 0.06);
+    }
+    .sheet-head {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 6px 16px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--line);
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .sheet-head strong { font-weight: 600; color: var(--ink); }
+    .log { flex: 1; display: flex; flex-direction: column; gap: 14px; padding: 22px 0 10px; }
+    .log:empty::before { content: attr(data-empty); font: italic 400 22px/1.3 var(--serif); color: var(--faint); }
+    .bot { max-width: 60ch; font-size: 16px; }
+    .bot.big { font: 400 30px/1.15 var(--serif); letter-spacing: -0.01em; }
+    .you { align-self: flex-start; padding-left: 14px; border-left: 2px solid var(--ink); font-weight: 500; }
+
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; padding: 6px 0 16px; }
+    .chips:empty { padding: 0; }
+    .chip {
+      border: 1px solid var(--ink);
+      border-radius: 999px;
+      background: var(--paper);
+      padding: 6px 14px;
+      font-size: 14px;
+    }
+    .chip:hover { background: #f5f5f5; }
+    .chip[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+    .chip.go { background: var(--ink); color: var(--paper); }
+
+    .line { display: flex; align-items: center; gap: 10px; padding-top: 12px; border-top: 1px solid var(--line); }
+    .line input { flex: 1; min-width: 0; border: 0; background: none; padding: 8px 0; font-size: 16px; }
+    .line input::placeholder { color: var(--faint); }
+    .line button {
+      width: 34px; height: 34px; flex: none;
+      border: 0; border-radius: 50%;
+      background: var(--ink); color: var(--paper);
+      font-size: 15px;
+    }
+    .line button:disabled { opacity: 0.2; cursor: default; }
+
+    /* dashboards at the side */
+    .side { position: sticky; top: 20px; display: flex; flex-direction: column; gap: 12px; }
+    .side-head { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); }
+    .tile {
+      padding: 14px 16px 16px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--paper);
+      transition: background 1.2s ease;
+    }
+    .tile.flash { background: var(--flash); transition: none; }
+    .tile.ghost { border-style: dashed; color: var(--faint); }
+    .tile h3 { margin: 0 0 10px; font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+    .tile.ghost h3 { color: var(--faint); }
+    .who { font: 400 30px/1 var(--serif); }
+    .who-sub { margin-top: 6px; font-size: 13px; color: var(--muted); }
+    .kpis { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 12px; }
+    .kpi b { display: block; font-size: 22px; font-weight: 600; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+    .kpi span { font-size: 12px; color: var(--muted); }
+    .bar { height: 4px; margin: 2px 0 12px; background: var(--line); border-radius: 2px; overflow: hidden; }
+    .bar i { display: block; height: 100%; background: var(--ink); transition: width 0.6s ease; }
+    ul.check, ul.acc { margin: 0; padding: 0; list-style: none; }
+    ul.check li, ul.acc li { display: flex; justify-content: space-between; gap: 10px; padding: 6px 0; border-top: 1px solid var(--line); font-size: 14px; }
+    ul.check li:first-child, ul.acc li:first-child { border-top: 0; }
+    ul.check li.done span:first-child { color: var(--faint); text-decoration: line-through; }
+    ul.check li em, ul.acc li em { font-style: normal; font-size: 12px; color: var(--muted); white-space: nowrap; }
+    ul.acc li em.ready { color: var(--good); }
+    .people { display: flex; flex-wrap: wrap; gap: 10px; }
+    .person { display: flex; align-items: center; gap: 8px; font-size: 13px; }
+    .person i {
+      width: 30px; height: 30px; flex: none;
+      display: grid; place-items: center;
+      border-radius: 50%;
+      background: var(--ink); color: var(--paper);
+      font-style: normal; font-size: 12px; font-weight: 600;
+    }
+
+    footer { max-width: 1240px; margin: 0 auto; padding: 0 32px 32px; font-size: 12px; color: var(--faint); }
+
+    @media (max-width: 900px) {
+      .top { padding: 14px 16px; }
+      .hero { padding: 26px 16px 22px; }
+      .lede { font-size: 15px; }
+      .desk { grid-template-columns: 1fr; gap: 0; padding: 0 0 32px; }
+      /* on phones the dashboards become a strip above the paper */
+      .side {
+        order: -1;
+        position: sticky;
+        top: 0;
+        z-index: 2;
+        flex-direction: row;
+        gap: 10px;
+        padding: 10px 16px;
+        overflow-x: auto;
+        background: var(--paper);
+        border-bottom: 1px solid var(--line);
+        align-items: flex-start;
+        scroll-snap-type: x mandatory;
+      }
+      .side-head { display: none; }
+      .tile { flex: none; width: 250px; max-height: 168px; overflow: auto; scroll-snap-align: start; }
+      .paper { margin: 16px 16px 0; padding: 22px 18px 18px; min-height: 520px; }
+      .bot.big { font-size: 25px; }
+      footer { padding: 0 16px 24px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .caret { animation: none; }
+      .tile, .bar i { transition: none; }
+    }
+  </style>
+</head>
+<body>
+  <header class="top">
+    <a class="mark" href="../">Lage</a>
+    <span class="crumb">onboarding</span>
+    <div class="mode" role="tablist" aria-label="Sheet">
+      <button type="button" role="tab" data-mode="preset" aria-selected="true">Preset</button>
+      <button type="button" role="tab" data-mode="blank" aria-selected="false">Blank</button>
+    </div>
+  </header>
+
+  <section class="hero" id="hero">
+    <h1>Welcome to <span class="name" id="name"></span><span class="caret" aria-hidden="true"></span></h1>
+    <p class="lede">Your first week, set up in one conversation. The sheet talks, the dashboards next to it fill in as you go.</p>
+  </section>
+
+  <main class="desk">
+    <section class="paper" aria-label="Onboarding sheet">
+      <div class="sheet-head"><span><strong id="sheet-title">Onboarding</strong></span><span id="sheet-meta"></span></div>
+      <div class="log" id="log" aria-live="polite"></div>
+      <div class="chips" id="chips"></div>
+      <form class="line" id="form">
+        <label class="sr" for="input">Your reply</label>
+        <input id="input" autocomplete="off" placeholder="Type here">
+        <button type="submit" id="send" aria-label="Send" disabled>↵</button>
+      </form>
+    </section>
+    <aside class="side" id="side" aria-label="Your dashboards"></aside>
+  </main>
+
+  <footer>Pretend companies for a demo. Not affiliated with any company named here.</footer>
+
+  <script>
+    const NAMES = ["Ex-Google", "Ex-Meta", "Ex-OpenAI", "Ex-Stripe", "Ex-Apple", "Ex-Nvidia", "Ex-Airbnb", "Ex-Spotify"];
+    const TEAMS = {
+      Engineering: {
+        kpis: [["12", "open tickets"], ["9", "deploys this week"], ["2", "incidents, 30 days"], ["week 3", "your first on-call"]],
+        tools: ["Chat", "Email", "Calendar", "Code repo", "Ticket board"],
+        buddy: ["Mira", "backend"], task: "First pull request"
+      },
+      Sales: {
+        kpis: [["214.000 €", "pipeline"], ["6", "demos this week"], ["23 %", "win rate"], ["31", "open deals"]],
+        tools: ["Chat", "Email", "Calendar", "CRM", "Call recorder"],
+        buddy: ["Jonas", "account exec"], task: "Shadow two demos"
+      },
+      Design: {
+        kpis: [["4", "open reviews"], ["v3.2", "design system"], ["2", "research sessions"], ["18", "screens in flight"]],
+        tools: ["Chat", "Email", "Calendar", "Design files", "Research notes"],
+        buddy: ["Nora", "product design"], task: "First design crit"
+      },
+      Ops: {
+        kpis: [["17", "open requests"], ["34", "vendors"], ["61 %", "budget used"], ["3", "policies to sign"]],
+        tools: ["Chat", "Email", "Calendar", "Finance tool", "Request desk"],
+        buddy: ["Paul", "people ops"], task: "Own the request desk for a day"
+      }
+    };
+
+    const state = { mode: "preset", company: null, name: "", team: "", start: null, tools: [], ready: [], buddy: null, step: "idle" };
+    const log = document.getElementById("log");
+    const chipsEl = document.getElementById("chips");
+    const input = document.getElementById("input");
+    const sendBtn = document.getElementById("send");
+    const side = document.getElementById("side");
+    const nameEl = document.getElementById("name");
+    const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const wait = (ms) => new Promise((r) => setTimeout(r, reduced ? 0 : ms));
+    let queue = Promise.resolve();
+    let session = 0;
+
+    // --- the hero: type, hold, delete, next name, until someone starts ---
+    let cycleIndex = 0;
+    let cycling = true;
+    async function cycle() {
+      while (cycling) {
+        const word = NAMES[cycleIndex % NAMES.length];
+        for (let i = 1; i <= word.length && cycling; i++) { nameEl.textContent = word.slice(0, i); await wait(70); }
+        if (!cycling) break;
+        await wait(1600);
+        for (let i = word.length; i >= 0 && cycling; i--) { nameEl.textContent = word.slice(0, i); await wait(35); }
+        if (cycling) cycleIndex++;
+      }
+    }
+    function lockCompany() {
+      if (state.company) return;
+      cycling = false;
+      state.company = NAMES[cycleIndex % NAMES.length];
+      nameEl.textContent = state.company;
+      document.getElementById("hero").classList.add("locked");
+      document.getElementById("sheet-title").textContent = "Onboarding · " + state.company;
+      renderSide(["company"]);
+    }
+    if (reduced) { nameEl.textContent = NAMES[0]; } else { cycle(); }
+
+    // --- the paper ---
+    function esc(v) { return String(v).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])); }
+    function say(text, big) {
+      const mine = session;
+      queue = queue.then(async () => {
+        if (mine !== session) return;
+        const p = document.createElement("p");
+        p.className = "bot" + (big ? " big" : "");
+        log.appendChild(p);
+        if (reduced) { p.textContent = text; return; }
+        for (let i = 1; i <= text.length; i++) {
+          if (mine !== session) return;
+          p.textContent = text.slice(0, i);
+          await new Promise((r) => setTimeout(r, 12));
+        }
+        await wait(250);
+      });
+      return queue;
+    }
+    function you(text) {
+      const p = document.createElement("p");
+      p.className = "you";
+      p.textContent = text;
+      log.appendChild(p);
+    }
+    function chips(list, multi) {
+      chipsEl.innerHTML = "";
+      list.forEach((item) => {
+        const b = document.createElement("button");
+        b.type = "button";
+        b.className = "chip" + (item.go ? " go" : "");
+        b.textContent = item.label;
+        if (multi && !item.go) b.setAttribute("aria-pressed", String(!!item.on));
+        b.addEventListener("click", () => item.on !== undefined && !item.go ? (b.setAttribute("aria-pressed", String(b.getAttribute("aria-pressed") !== "true")), item.toggle && item.toggle(b)) : item.pick());
+        chipsEl.appendChild(b);
+      });
+    }
+    function clearChips() { chipsEl.innerHTML = ""; }
+
+    // --- dashboards ---
+    function day(offset) {
+      const d = new Date(state.start);
+      d.setDate(d.getDate() + offset);
+      return d.toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short" });
+    }
+    function checklist() {
+      const t = TEAMS[state.team];
+      const allReady = state.tools.length > 0 && state.ready.length === state.tools.length;
+      return [
+        ["Laptop pickup", 0, !!state.start],
+        ["Accounts set up", 0, allReady],
+        ["Coffee with your buddy", 1, !!state.buddy],
+        [t ? t.task : "First real task", 2, false],
+        ["Week-one retro", 4, false]
+      ];
+    }
+    function hash(s) { let h = 7; for (const c of s) h = (h * 31 + c.charCodeAt(0)) % 9973; return h; }
+    function tile(key, title, body, ghost) {
+      return '<section class="tile' + (ghost ? " ghost" : "") + '" data-key="' + key + '"><h3>' + esc(title) + "</h3>" + body + "</section>";
+    }
+    function renderSide(changed) {
+      const t = TEAMS[state.team];
+      let html = '<div class="side-head"><span>Your dashboards</span><span>' + (state.company ? esc(state.company) : "not started") + "</span></div>";
+      html += tile("you", "You",
+        '<div class="who">' + esc(state.name || "New hire") + '</div><div class="who-sub">' +
+        esc((state.team || "No team yet") + (state.start ? " · starts " + day(0) : "")) + "</div>");
+      if (state.company) {
+        const h = hash(state.company);
+        const base = state.company.replace(/^Ex-/, "");
+        html += tile("company", "Company",
+          '<div class="kpis"><div class="kpi"><b>' + (24 + h % 90) + ' → ' + (25 + h % 90) + "</b><span>headcount, incl. you</span></div>" +
+          '<div class="kpi"><b>' + (12 + h % 19) + " mo</b><span>runway</span></div></div>" +
+          '<p class="who-sub">Founded by three people who all left ' + esc(base) + ".</p>");
+      }
+      html += t
+        ? tile("team", state.team, '<div class="kpis">' + t.kpis.map((k) => '<div class="kpi"><b>' + esc(k[0]) + "</b><span>" + esc(k[1]) + "</span></div>").join("") + "</div>")
+        : tile("team", "Team dashboard", '<p class="who-sub">Appears once you pick a team.</p>', true);
+      if (state.start) {
+        const items = checklist();
+        const done = items.filter((i) => i[2]).length;
+        html += tile("week", "First week · " + done + "/" + items.length,
+          '<div class="bar"><i style="width:' + (done / items.length * 100) + '%"></i></div><ul class="check">' +
+          items.map((i) => '<li class="' + (i[2] ? "done" : "") + '"><span>' + esc(i[0]) + "</span><em>" + day(i[1]) + "</em></li>").join("") + "</ul>");
+      } else {
+        html += tile("week", "First week", '<p class="who-sub">Appears once you pick a start date.</p>', true);
+      }
+      if (state.tools.length) {
+        html += tile("accounts", "Accounts · " + state.ready.length + "/" + state.tools.length,
+          '<ul class="acc">' + state.tools.map((name) => {
+            const ok = state.ready.includes(name);
+            return "<li><span>" + esc(name) + '</span><em class="' + (ok ? "ready" : "") + '">' + (ok ? "ready" : "requesting…") + "</em></li>";
+          }).join("") + "</ul>");
+      }
+      if (state.buddy) {
+        html += tile("people", "People to meet",
+          '<div class="people">' + [state.buddy, ["Lead", state.team.toLowerCase()], ["Founder", "says hi"]].map((p) =>
+            '<span class="person"><i>' + esc(p[0].charAt(0)) + "</i><span>" + esc(p[0]) + "<br><small>" + esc(p[1]) + "</small></span></span>").join("") + "</div>");
+      }
+      side.innerHTML = html;
+      (changed || []).forEach((key) => {
+        const el = side.querySelector('[data-key="' + key + '"]');
+        if (!el) return;
+        el.classList.add("flash");
+        requestAnimationFrame(() => requestAnimationFrame(() => el.classList.remove("flash")));
+        if (matchMedia("(max-width: 900px)").matches) el.scrollIntoView({ behavior: reduced ? "auto" : "smooth", inline: "start", block: "nearest" });
+      });
+    }
+
+    // --- setters, shared by the preset script and the blank sheet ---
+    function setTeam(team) { state.team = team; renderSide(["team", "you", "week"]); }
+    function setStart(choice) {
+      const d = new Date();
+      d.setHours(9, 0, 0, 0);
+      if (choice !== "Today") {
+        const toMonday = (8 - d.getDay()) % 7 || 7;
+        d.setDate(d.getDate() + toMonday + (choice === "Next week" ? 7 : 0));
+      }
+      state.start = d;
+      renderSide(["week", "you"]);
+    }
+    function setTools(list) {
+      state.tools = list;
+      state.ready = [];
+      renderSide(["accounts"]);
+      list.forEach((name, i) => setTimeout(() => {
+        state.ready.push(name);
+        renderSide(["accounts"].concat(state.ready.length === list.length ? ["week"] : []));
+      }, (reduced ? 0 : 700) * (i + 1)));
+    }
+    function setBuddy() {
+      const t = TEAMS[state.team] || TEAMS.Engineering;
+      state.buddy = t.buddy;
+      renderSide(["people", "week"]);
+    }
+
+    // --- the company preset: a short script the people team wrote ---
+    function presetIntro() {
+      document.getElementById("sheet-meta").textContent = "Preset by the people team";
+      log.dataset.empty = "";
+      say("This sheet was prepared for you before your first day. Press start when you're ready.");
+      chips([{ label: "Start onboarding", go: true, pick: startPreset }]);
+      input.placeholder = "Or just say hi";
+      state.step = "intro";
+    }
+    async function startPreset() {
+      clearChips();
+      lockCompany();
+      say("Welcome to " + state.company + ".", true);
+      say("I'm Lage. I'll set up your first week while we talk. What should we call you?");
+      await queue;
+      input.placeholder = "Your first name";
+      input.focus();
+      state.step = "name";
+    }
+    async function answer(text) {
+      if (state.step === "intro") return startPreset();
+      if (state.step === "name") {
+        state.name = text.split(" ")[0].replace(/^./, (c) => c.toUpperCase());
+        renderSide(["you"]);
+        say("Nice to meet you, " + state.name + ". Which team are you joining?");
+        await queue;
+        state.step = "team";
+        input.placeholder = "Or type a team";
+        return chips(Object.keys(TEAMS).map((team) => ({ label: team, pick: () => pickTeam(team) })));
+      }
+      if (state.step === "team") {
+        const team = Object.keys(TEAMS).find((k) => text.toLowerCase().includes(k.toLowerCase().slice(0, 3)));
+        if (team) return pickTeam(team, true);
+        return say("I only know four teams so far. Pick one of these.");
+      }
+      if (state.step === "start") {
+        const c = /today/i.test(text) ? "Today" : /next/i.test(text) ? "Next week" : "Monday";
+        return pickStart(c, true);
+      }
+      if (state.step === "buddy") return pickBuddy(!/no|good|nah/i.test(text), true);
+      return freeAnswer(text);
+    }
+    async function pickTeam(team, typed) {
+      if (!typed) you(team);
+      clearChips();
+      setTeam(team);
+      say(team + " it is. Your team dashboard is on the side now. When do you start?");
+      await queue;
+      state.step = "start";
+      chips(["Today", "Monday", "Next week"].map((c) => ({ label: c, pick: () => pickStart(c) })));
+    }
+    async function pickStart(choice, typed) {
+      if (!typed) you(choice);
+      clearChips();
+      setStart(choice);
+      say("Done. Your first week starts " + day(0) + ". Which accounts do you need? I picked the usual ones for " + state.team + ".");
+      await queue;
+      state.step = "tools";
+      const picked = new Set(TEAMS[state.team].tools);
+      chips(TEAMS[state.team].tools.concat(["Expense app", "VPN"]).map((name) => ({
+        label: name, on: picked.has(name),
+        toggle: (b) => b.getAttribute("aria-pressed") === "true" ? picked.add(name) : picked.delete(name)
+      })).concat([{ label: "Request access", go: true, pick: () => pickTools([...picked]) }]), true);
+    }
+    async function pickTools(list) {
+      you(list.join(", "));
+      clearChips();
+      setTools(list);
+      say("Requesting " + list.length + " accounts. Most of it is ready before your coffee is.");
+      say("Last thing: want a buddy for the first week?");
+      await queue;
+      state.step = "buddy";
+      chips([{ label: "Yes please", pick: () => pickBuddy(true) }, { label: "I'm good", pick: () => pickBuddy(false) }]);
+    }
+    async function pickBuddy(yes, typed) {
+      if (!typed) you(yes ? "Yes please" : "I'm good");
+      clearChips();
+      if (yes) {
+        setBuddy();
+        say("Meet " + state.buddy[0] + " from " + state.buddy[1] + ". Coffee is booked for " + day(1) + ".");
+      }
+      say("That's it, " + (state.name || "friend") + ". Everything on the side is yours now. Ask me anything else on this sheet.");
+      await queue;
+      state.step = "free";
+      input.placeholder = "Ask anything";
+      chips([{ label: "Open my dashboard", go: true, pick: () => { location.href = "../"; } }, { label: "Start over", pick: reset }]);
+    }
+
+    // --- the blank sheet: nothing scripted, the dashboards react to what you say ---
+    function blankIntro() {
+      document.getElementById("sheet-meta").textContent = "Blank sheet";
+      log.dataset.empty = "A blank page. Tell it who you are, your team, when you start, what you need.";
+      clearChips();
+      input.placeholder = "Write anything";
+      state.step = "free";
+    }
+    function freeAnswer(text) {
+      lockCompany();
+      const q = text.toLowerCase();
+      const team = Object.keys(TEAMS).find((k) => q.includes(k.toLowerCase().slice(0, 4)) || (k === "Engineering" && /engineer|developer|dev\b/.test(q)));
+      const named = text.match(/(?:i'm|i am|my name is|call me)\s+([a-zäöüß]+)/i);
+      if (named && !/^(in|on|a|the|joining|starting)$/i.test(named[1])) {
+        state.name = named[1].replace(/^./, (c) => c.toUpperCase());
+        renderSide(["you"]);
+      }
+      if (team) {
+        setTeam(team);
+        return say(team + ", noted. Your team dashboard is on the side. When do you start?");
+      }
+      if (/today|monday|next week|start/.test(q)) {
+        setStart(/today/.test(q) ? "Today" : /next/.test(q) ? "Next week" : "Monday");
+        return say("Your week starts " + day(0) + ". The plan is on the side.");
+      }
+      if (/account|tool|access|login|need/.test(q)) {
+        setTools((TEAMS[state.team] || TEAMS.Engineering).tools);
+        return say("Requesting the usual accounts" + (state.team ? " for " + state.team : "") + ". Watch them turn ready.");
+      }
+      if (/buddy|meet|who/.test(q)) {
+        if (!state.team) setTeam("Engineering");
+        setBuddy();
+        return say("You'll meet " + state.buddy[0] + " first. Coffee on " + (state.start ? day(1) : "your second day") + ".");
+      }
+      if (/runway|money|cash|headcount|company/.test(q)) {
+        return say(state.company + " is still small enough that everyone knows your name by Friday. The numbers are on the side.");
+      }
+      if (named) return say("Hi " + state.name + ". Which team are you on?");
+      return say("Noted. Try telling me your team, your start day, or which accounts you need.");
+    }
+
+    function reset() {
+      session++;
+      queue = Promise.resolve();
+      Object.assign(state, { company: null, name: "", team: "", start: null, tools: [], ready: [], buddy: null, step: "idle" });
+      log.innerHTML = "";
+      document.getElementById("hero").classList.remove("locked");
+      document.getElementById("sheet-title").textContent = "Onboarding";
+      cycleIndex++;
+      if (!cycling && !reduced) { cycling = true; cycle(); }
+      renderSide();
+      if (state.mode === "preset") presetIntro(); else blankIntro();
+    }
+
+    document.querySelector(".mode").addEventListener("click", (e) => {
+      const b = e.target.closest("[data-mode]");
+      if (!b || b.dataset.mode === state.mode) return;
+      state.mode = b.dataset.mode;
+      document.querySelectorAll("[data-mode]").forEach((x) => x.setAttribute("aria-selected", String(x === b)));
+      reset();
+    });
+    input.addEventListener("input", () => { sendBtn.disabled = !input.value.trim(); });
+    document.getElementById("form").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const text = input.value.trim();
+      if (!text) return;
+      input.value = "";
+      sendBtn.disabled = true;
+      you(text);
+      answer(text);
+    });
+
+    renderSide();
+    presetIntro();
+  </script>
+</body>
+</html>
