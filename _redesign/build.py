@@ -45,7 +45,10 @@ VERSIONS = {
         "name": "Founder",
         "fonts": "Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Permanent+Marker",
         "replace": [
-            ('<p class="brand-kicker">Lage</p>', '<p class="brand-kicker">lage <span>(pre-seed energy)</span></p>'),
+            ('<p class="brand-kicker"><span class="om-mark" aria-hidden="true">ॐ</span>Lage</p>',
+             '<p class="brand-kicker"><span class="om-mark" aria-hidden="true" style="--om-size: 0.5em">ॐ</span>lage <span>(pre-seed energy)</span></p>'),
+            ('data-on="Klang an" data-off="Klang aus" aria-pressed="false">Klang aus</button>',
+             'data-on="sound on 🔊" data-off="sound off 🔇" aria-pressed="false">sound off 🔇</button>'),
             ('aria-selected="true">Buchladen</button>', 'aria-selected="true">bookshop 📚</button>'),
             ('aria-selected="false">Software</button>', 'aria-selected="false">saas 💻</button>'),
             ('aria-selected="false">Event</button>', 'aria-selected="false">events 🪩</button>'),
@@ -87,6 +90,7 @@ for key, v in VERSIONS.items():
     for old, new in v["replace"]:
         assert page.count(old) == 1, f"{key}: {old!r} found {page.count(old)} times"
         page = page.replace(old, new)
+    page = page.replace('href="brand.css"', 'href="../brand.css"').replace('src="brand.js"', 'src="../brand.js"')
     out = ROOT / key / "index.html"
     out.parent.mkdir(exist_ok=True)
     out.write_text(page)

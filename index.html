@@ -398,13 +398,15 @@
     .sheet-value { white-space: nowrap; font-size: min(96px, 17cqi); }
     .sheet .pair .sheet-value { font-size: min(72px, 8.5cqi); }
   </style>
+  <link rel="stylesheet" href="brand.css">
+  <script src="brand.js" defer></script>
 </head>
 <body>
   <div class="app">
     <aside class="rail" id="rail">
       <div class="brand">
         <div class="brand-meta">
-          <p class="brand-kicker">Lage</p>
+          <p class="brand-kicker"><span class="om-mark" aria-hidden="true">ॐ</span>Lage</p>
           <p class="dateline" id="dateline"></p>
         </div>
         <p class="brand-name" id="company">Heft &amp; Bogen</p>
@@ -436,7 +438,7 @@
           <a class="nav-btn" href="#todo">To-do</a>
         </div>
       </nav>
-      <p class="note">Beispieldaten</p>
+      <div class="om-foot"><p class="note">Beispieldaten</p><button class="om-sound" type="button" data-om-sound data-on="Klang an" data-off="Klang aus" aria-pressed="false">Klang aus</button></div>
     </aside>
     <div class="backdrop" id="backdrop"></div>
     <main>
@@ -449,7 +451,7 @@
           <div class="frame" id="stage"></div>
           <aside class="chat-panel" aria-label="Chat">
             <div class="chat-head">Chat</div>
-            <div class="thread" id="thread" aria-live="polite"></div>
+            <div class="thread" id="thread" aria-live="polite" data-om-chime=".msg-agent"></div>
             <form class="composer" id="composer">
             <label class="sr" for="msg">Nachricht</label>
             <textarea id="msg" rows="1" placeholder="Nachricht schreiben"></textarea>

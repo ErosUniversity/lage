@@ -1,0 +1,49 @@
+/* Om-Branding für alle Versionen: ॐ-Zeichen und Klang-Schalter. Verhalten in brand.js. */
+:root {
+  --om-saffron: #ff9933;
+  --om-ink: #1c1b19;
+}
+
+span.om-mark {
+  display: inline-grid;
+  place-items: center;
+  width: 1.7em;
+  height: 1.7em;
+  margin: 0 0.45em 0 0;
+  border-radius: 50%;
+  background: var(--om-saffron);
+  color: var(--om-ink);
+  font: normal 400 var(--om-size, 1.3em)/1 "Kohinoor Devanagari", "Devanagari Sangam MN", "Noto Sans Devanagari", serif;
+  letter-spacing: 0;
+  text-transform: none;
+  vertical-align: middle;
+}
+.om-breathe { animation: om-breathe 3.2s ease-in-out 2; }
+@keyframes om-breathe {
+  50% { transform: scale(1.16); box-shadow: 0 0 0 0.3em rgba(255, 153, 51, 0.25); }
+}
+
+.om-sound {
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  background: transparent;
+  color: inherit;
+  padding: 4px 11px;
+  font: inherit;
+  font-size: 12px;
+  white-space: nowrap;
+  cursor: pointer;
+  opacity: 0.75;
+}
+.om-sound:hover { opacity: 1; }
+.om-sound[aria-pressed="true"] {
+  opacity: 1;
+  background: var(--om-saffron);
+  border-color: var(--om-saffron);
+  color: var(--om-ink);
+}
+.om-foot { display: flex; align-items: center; gap: 12px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .om-breathe { animation: none; }
+}

@@ -282,12 +282,14 @@
       .rail { transition: none; }
     }
   </style>
+  <link rel="stylesheet" href="../brand.css">
+  <script src="../brand.js" defer></script>
 </head>
 <body>
   <div class="app">
     <aside class="rail" id="rail">
       <div class="brand">
-        <p class="brand-kicker">Lage</p>
+        <p class="brand-kicker"><span class="om-mark" aria-hidden="true">ॐ</span>Lage</p>
         <p class="brand-name" id="company">Heft &amp; Bogen</p>
         <div class="seg" role="tablist" aria-label="Betrieb">
           <button type="button" role="tab" data-pack="buch" aria-selected="true">Buchladen</button>
@@ -318,6 +320,7 @@
         </div>
       </nav>
       <div class="rail-foot"><button type="button" class="theme-btn" id="theme" aria-pressed="false">Hell</button><p class="note">Beispieldaten</p></div>
+      <button class="om-sound" type="button" data-om-sound data-on="Klang an" data-off="Klang aus" aria-pressed="false">Klang aus</button>
     </aside>
     <div class="backdrop" id="backdrop"></div>
     <main>
@@ -330,7 +333,7 @@
           <div class="frame" id="stage"></div>
           <aside class="chat-panel" aria-label="Chat">
             <div class="chat-head">Chat</div>
-            <div class="thread" id="thread" aria-live="polite"></div>
+            <div class="thread" id="thread" aria-live="polite" data-om-chime=".msg-agent"></div>
             <form class="composer" id="composer">
             <label class="sr" for="msg">Nachricht</label>
             <textarea id="msg" rows="1" placeholder="Nachricht schreiben"></textarea>

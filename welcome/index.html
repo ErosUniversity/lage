@@ -207,15 +207,18 @@
       .tile, .bar i { transition: none; }
     }
   </style>
+  <link rel="stylesheet" href="../brand.css">
+  <script src="../brand.js" defer></script>
 </head>
 <body>
   <header class="top">
-    <a class="mark" href="../">Lage</a>
+    <a class="mark" href="../"><span class="om-mark" aria-hidden="true" style="--om-size: 0.62em">ॐ</span>Lage</a>
     <span class="crumb">onboarding</span>
     <div class="mode" role="tablist" aria-label="Sheet">
       <button type="button" role="tab" data-mode="preset" aria-selected="true">Preset</button>
       <button type="button" role="tab" data-mode="blank" aria-selected="false">Blank</button>
     </div>
+    <button class="om-sound" type="button" data-om-sound data-on="Sound on" data-off="Sound off" aria-pressed="false">Sound off</button>
   </header>
 
   <section class="hero" id="hero">
@@ -226,7 +229,7 @@
   <main class="desk">
     <section class="paper" aria-label="Onboarding sheet">
       <div class="sheet-head"><span><strong id="sheet-title">Onboarding</strong></span><span id="sheet-meta"></span></div>
-      <div class="log" id="log" aria-live="polite"></div>
+      <div class="log" id="log" aria-live="polite" data-om-chime=".bot"></div>
       <div class="chips" id="chips"></div>
       <form class="line" id="form">
         <label class="sr" for="input">Your reply</label>
