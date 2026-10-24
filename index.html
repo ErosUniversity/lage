@@ -17,6 +17,9 @@
       --line-strong: #c9c1b4;
       --good: #1d6b43;
       --bad: #9a4034;
+      --saffron: #ff9933;
+      --saffron-deep: #b85c00;
+      --gold: #c9a24b;
       --radius: 16px;
       --sans: "SF Pro Text", "SF Pro Display", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
@@ -35,7 +38,7 @@
     a.nav-btn, a.tile { text-decoration: none; color: inherit; }
     :focus { outline: none; }
     :focus-visible {
-      outline: 2px solid var(--ink);
+      outline: 2px solid var(--saffron-deep);
       outline-offset: 2px;
     }
     .sr {
@@ -69,11 +72,31 @@
     }
     .brand { padding: 0 8px; }
     .brand-kicker {
+      display: flex;
+      align-items: center;
+      gap: 8px;
       margin: 0;
       font-size: 12px;
       letter-spacing: 0.08em;
       text-transform: uppercase;
       color: var(--faint);
+    }
+    .mark {
+      display: grid;
+      place-items: center;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: var(--saffron);
+      color: var(--ink);
+      font-family: "Kohinoor Devanagari", "Devanagari Sangam MN", "Noto Sans Devanagari", serif;
+      font-size: 16px;
+      line-height: 1;
+      letter-spacing: 0;
+    }
+    .mark.breathe { animation: breathe 3.2s ease-in-out 2; }
+    @keyframes breathe {
+      50% { transform: scale(1.16); box-shadow: 0 0 0 7px rgba(255, 153, 51, 0.22); }
     }
     .brand-name {
       margin: 4px 0 0;
@@ -129,13 +152,32 @@
     .nav-btn[aria-current="page"] {
       background: var(--ink);
       color: var(--paper);
+      box-shadow: inset 3px 0 0 var(--saffron);
     }
 
-    .note {
+    .rail-foot {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
       margin-top: auto;
       padding: 0 8px;
+    }
+    .note {
+      margin: 0;
       font-size: 12px;
       color: var(--faint);
+    }
+    .sound-btn {
+      border: 1px solid var(--line-strong);
+      background: var(--card);
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 12px;
+    }
+    .sound-btn[aria-pressed="true"] {
+      background: var(--saffron);
+      border-color: var(--saffron);
     }
 
     main {
@@ -342,8 +384,8 @@
     .icon-btn:hover { background: rgba(28, 27, 25, 0.06); }
     .icon-btn[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
     #send {
-      background: var(--ink);
-      color: var(--paper);
+      background: var(--saffron);
+      color: var(--ink);
     }
     #send:disabled { opacity: 0.28; }
     .icon-btn svg { width: 16px; height: 16px; display: block; }
@@ -380,6 +422,7 @@
     }
     @media (prefers-reduced-motion: reduce) {
       .rail { transition: none; }
+      .mark.breathe { animation: none; }
     }
   </style>
 </head>
@@ -387,7 +430,7 @@
   <div class="app">
     <aside class="rail" id="rail">
       <div class="brand">
-        <p class="brand-kicker">Lage</p>
+        <p class="brand-kicker"><span class="mark" id="mark" aria-hidden="true">ॐ</span>Lage</p>
         <p class="brand-name" id="company">Heft &amp; Bogen</p>
         <div class="seg" role="tablist" aria-label="Betrieb">
           <button type="button" role="tab" data-pack="buch" aria-selected="true">Buchladen</button>
@@ -417,7 +460,10 @@
           <a class="nav-btn" href="#todo">To-do</a>
         </div>
       </nav>
-      <p class="note">Beispieldaten</p>
+      <div class="rail-foot">
+        <p class="note">Beispieldaten</p>
+        <button class="sound-btn" type="button" id="sound" aria-pressed="false">Klang aus</button>
+      </div>
     </aside>
     <div class="backdrop" id="backdrop"></div>
     <main>
@@ -666,6 +712,7 @@
       if (!trimmed) return;
       messages.push({ role: "user", text: trimmed });
       messages.push({ role: "agent", text: answerFor(trimmed) });
+      if (soundOn()) playChime();
       msg.value = "";
       fit();
       sendBtn.disabled = true;
@@ -706,6 +753,92 @@
     document.getElementById("composer").addEventListener("submit", (event) => {
       event.preventDefault();
       submitText(msg.value);
+    });
+
+    // Klang: Netzbrummen (50 Hz) geht in ein Om (136,1 Hz) über. Startet nur nach Klick.
+    const OM = 136.1;
+    const soundBtn = document.getElementById("sound");
+    const mark = document.getElementById("mark");
+    let audio = null;
+    let master = null;
+
+    function soundOn() {
+      return soundBtn.getAttribute("aria-pressed") === "true";
+    }
+
+    function voice(type, freq, level, start, stop, into) {
+      const osc = audio.createOscillator();
+      const gain = audio.createGain();
+      osc.type = type;
+      osc.frequency.value = freq;
+      gain.gain.value = level;
+      osc.connect(gain).connect(into);
+      osc.start(start);
+      osc.stop(stop);
+    }
+
+    function envelope(peak, start, top, end) {
+      const gain = audio.createGain();
+      gain.gain.setValueAtTime(0, audio.currentTime);
+      gain.gain.setValueAtTime(0, start);
+      gain.gain.linearRampToValueAtTime(peak, top);
+      gain.gain.linearRampToValueAtTime(0, end);
+      gain.connect(master);
+      return gain;
+    }
+
+    function playOm() {
+      const now = audio.currentTime;
+
+      const hum = audio.createBiquadFilter();
+      hum.type = "lowpass";
+      hum.frequency.value = 320;
+      hum.connect(envelope(0.06, now, now + 0.5, now + 2.4));
+      voice("sawtooth", 50, 1, now, now + 2.5, hum);
+
+      const mouth = audio.createBiquadFilter();
+      mouth.type = "lowpass";
+      mouth.Q.value = 4;
+      mouth.frequency.setValueAtTime(1100, now);
+      mouth.frequency.setValueAtTime(1100, now + 2.6);
+      mouth.frequency.linearRampToValueAtTime(600, now + 4.2);
+      mouth.frequency.linearRampToValueAtTime(250, now + 5.8);
+      mouth.connect(envelope(0.22, now + 0.8, now + 2.6, now + 7.5));
+      voice("sawtooth", OM, 0.5, now + 0.8, now + 7.6, mouth);
+      voice("sawtooth", OM * 1.004, 0.4, now + 0.8, now + 7.6, mouth);
+      voice("sine", OM / 2, 0.6, now + 0.8, now + 7.6, mouth);
+    }
+
+    function playChime() {
+      const now = audio.currentTime;
+      [[OM * 4, 0.08], [OM * 4 * 2.76, 0.025]].forEach(([freq, level]) => {
+        const osc = audio.createOscillator();
+        const gain = audio.createGain();
+        osc.frequency.value = freq;
+        gain.gain.setValueAtTime(level, now);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + 1.4);
+        osc.connect(gain).connect(master);
+        osc.start(now);
+        osc.stop(now + 1.5);
+      });
+    }
+
+    soundBtn.addEventListener("click", () => {
+      const on = !soundOn();
+      soundBtn.setAttribute("aria-pressed", on ? "true" : "false");
+      soundBtn.textContent = on ? "Klang an" : "Klang aus";
+      if (!audio) {
+        audio = new (window.AudioContext || window.webkitAudioContext)();
+        master = audio.createGain();
+        master.connect(audio.destination);
+      }
+      master.gain.setTargetAtTime(on ? 1 : 0, audio.currentTime, 0.08);
+      if (!on) return;
+      audio.resume();
+      playOm();
+      mark.classList.remove("breathe");
+      void mark.offsetWidth;
+      mark.classList.add("breathe");
     });
 
     const Mic = window.SpeechRecognition || window.webkitSpeechRecognition;
