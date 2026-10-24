@@ -90,7 +90,7 @@ for key, v in VERSIONS.items():
     for old, new in v["replace"]:
         assert page.count(old) == 1, f"{key}: {old!r} found {page.count(old)} times"
         page = page.replace(old, new)
-    page = page.replace('href="brand.css"', 'href="../brand.css"').replace('src="brand.js"', 'src="../brand.js"')
+    page = page.replace('href="brand.css"', 'href="../brand.css"').replace('src="brand.js"', 'src="../brand.js"').replace('src="bridge.js"', 'src="../bridge.js"')
     out = ROOT / key / "index.html"
     out.parent.mkdir(exist_ok=True)
     out.write_text(page)

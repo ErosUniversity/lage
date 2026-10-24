@@ -1,0 +1,927 @@
+{
+  "buch": {
+    "company": "Heft & Bogen",
+    "tiles": {
+      "finance": {
+        "id": "finance",
+        "category": "Finance",
+        "value": "42.800 €",
+        "metric": "Liquide Mittel",
+        "delta": "+2.100 €",
+        "sign": "up",
+        "line": "42.800 € liquide Mittel, 2.100 € über dem Vormonat.",
+        "also": null
+      },
+      "tickets": {
+        "id": "tickets",
+        "category": "Tickets & Probleme",
+        "value": "6",
+        "metric": "Überfällige Fälle",
+        "delta": "2 seit gestern",
+        "sign": "",
+        "line": "6 Fälle sind über der Frist. 2 Probleme sind kritisch. Eines ist der fehlende Nachtzug.",
+        "also": {
+          "value": "2",
+          "metric": "Kritisch und offen",
+          "delta": "1 in der Lieferkette",
+          "sign": ""
+        }
+      },
+      "social": {
+        "id": "social",
+        "category": "Social Media",
+        "value": "18.400",
+        "metric": "Reichweite, 7 Tage",
+        "delta": "+12 %",
+        "sign": "up",
+        "line": "Reichweite der letzten 7 Tage: 18.400, davon 12.100 auf Instagram.",
+        "also": null
+      },
+      "conversion": {
+        "id": "conversion",
+        "category": "Conversion",
+        "value": "4,2 %",
+        "metric": "Käufe je Besuch",
+        "delta": "−0,3 Punkte",
+        "sign": "down",
+        "line": "4,2 % der Besuche wurden ein Kauf. 52 Käufe aus 1.240 Besuchen.",
+        "also": null
+      },
+      "retention": {
+        "id": "retention",
+        "category": "Retention",
+        "value": "31 %",
+        "metric": "Zweitkauf in 90 Tagen",
+        "delta": "+1 Punkt",
+        "sign": "up",
+        "line": "31 % der Käufer haben in 90 Tagen ein zweites Mal gekauft.",
+        "also": null
+      },
+      "messages": {
+        "id": "messages",
+        "category": "Nachrichten",
+        "value": "14",
+        "metric": "Ungelesen",
+        "delta": "3 Konten",
+        "sign": "",
+        "line": "14 Nachrichten sind ungelesen.",
+        "also": null
+      },
+      "management": {
+        "id": "management",
+        "category": "Management",
+        "value": "5",
+        "metric": "Überfällige Aufgaben",
+        "delta": "älteste 4 Tage",
+        "sign": "",
+        "line": "5 delegierte Aufgaben sind über der Frist.",
+        "also": null
+      },
+      "todo": {
+        "id": "todo",
+        "category": "To-do",
+        "value": "3",
+        "metric": "Wichtig und dringend",
+        "delta": "von 11 Punkten",
+        "sign": "",
+        "line": "3 eigene Punkte sind wichtig und dringend.",
+        "also": null
+      }
+    },
+    "sheets": {
+      "finance": {
+        "headers": [
+          "Konto",
+          "Stand"
+        ],
+        "rows": [
+          [
+            "Geschäftskonto",
+            "38.200 €"
+          ],
+          [
+            "Kasse",
+            "4.600 €"
+          ],
+          [
+            "Lieferanten, fällig in 14 Tagen",
+            "6.400 €"
+          ]
+        ],
+        "numeric": [
+          1
+        ]
+      },
+      "tickets": {
+        "headers": [
+          "Fall",
+          "Frist",
+          "Kanal"
+        ],
+        "rows": [
+          [
+            "Abholung Nachtzug",
+            "2 Tage über",
+            "Laden"
+          ],
+          [
+            "Karton Suhrkamp",
+            "1 Tag über",
+            "Verlag"
+          ],
+          [
+            "Rechnung Müller",
+            "heute",
+            "Laden"
+          ],
+          [
+            "Schulbestellung",
+            "4 Tage über",
+            "Schule"
+          ]
+        ],
+        "numeric": []
+      },
+      "problems": {
+        "headers": [
+          "Quelle",
+          "Sache"
+        ],
+        "rows": [
+          [
+            "Lieferkette",
+            "Nachtzug, Verlag liefert nicht"
+          ],
+          [
+            "Server",
+            "Shop langsam seit 6 Minuten"
+          ]
+        ],
+        "numeric": []
+      },
+      "social": {
+        "headers": [
+          "Kanal",
+          "Reichweite"
+        ],
+        "rows": [
+          [
+            "Instagram",
+            "12.100"
+          ],
+          [
+            "Facebook",
+            "6.300"
+          ]
+        ],
+        "numeric": [
+          1
+        ]
+      },
+      "conversion": {
+        "headers": [
+          "Stufe",
+          "Anzahl"
+        ],
+        "rows": [
+          [
+            "Besuche",
+            "1.240"
+          ],
+          [
+            "Reservierungen",
+            "86"
+          ],
+          [
+            "Käufe",
+            "52"
+          ]
+        ],
+        "numeric": [
+          1
+        ]
+      },
+      "retention": {
+        "headers": [
+          "Kohorte",
+          "Zweitkauf"
+        ],
+        "rows": [
+          [
+            "Juni",
+            "28 %"
+          ],
+          [
+            "Juli",
+            "33 %"
+          ],
+          [
+            "August",
+            "31 %"
+          ]
+        ],
+        "numeric": [
+          1
+        ]
+      },
+      "messages": {
+        "headers": [
+          "Konto",
+          "Von",
+          "Inhalt"
+        ],
+        "rows": [
+          [
+            "Laden",
+            "Frau Kehl",
+            "Ist der Nachtzug da?"
+          ],
+          [
+            "Verlag",
+            "Suhrkamp",
+            "Neuer Termin 28.10."
+          ],
+          [
+            "Intern",
+            "Lena",
+            "Bestand ist geprüft"
+          ]
+        ],
+        "numeric": []
+      },
+      "management": {
+        "headers": [
+          "Aufgabe",
+          "Person",
+          "Status"
+        ],
+        "rows": [
+          [
+            "Lagermeldung",
+            "Lena",
+            "Ausstehend"
+          ],
+          [
+            "Schaufenster",
+            "Tim",
+            "Angefangen"
+          ],
+          [
+            "Inventur Krimi",
+            "Lena",
+            "Ausstehend"
+          ],
+          [
+            "Kasse zählen",
+            "Tim",
+            "Beendet"
+          ]
+        ],
+        "numeric": []
+      },
+      "todo": {
+        "headers": [
+          "Feld",
+          "Punkt"
+        ],
+        "rows": [
+          [
+            "Wichtig und dringend",
+            "Verlag anrufen"
+          ],
+          [
+            "Wichtig und dringend",
+            "Schulbestellung klären"
+          ],
+          [
+            "Wichtig und dringend",
+            "Kassensturz"
+          ],
+          [
+            "Wichtig und nicht dringend",
+            "Herbstprogramm"
+          ],
+          [
+            "Nicht wichtig und dringend",
+            "Schaufensterfolie"
+          ],
+          [
+            "Nicht wichtig und nicht dringend",
+            "Altbestand sichten"
+          ]
+        ],
+        "numeric": []
+      }
+    }
+  },
+  "software": {
+    "company": "Nordkap",
+    "tiles": {
+      "finance": {
+        "id": "finance",
+        "category": "Finance",
+        "value": "310.000 €",
+        "metric": "Liquide Mittel",
+        "delta": "−18.000 €",
+        "sign": "down",
+        "line": "310.000 € liquide Mittel, 18.000 € unter dem Vormonat.",
+        "also": null
+      },
+      "tickets": {
+        "id": "tickets",
+        "category": "Tickets & Probleme",
+        "value": "11",
+        "metric": "Überfällige Fälle",
+        "delta": "4 seit gestern",
+        "sign": "",
+        "line": "11 Supportfälle sind über der Antwortfrist. 1 Problem ist kritisch: die API antwortet seit 40 Minuten mit Fehlern.",
+        "also": {
+          "value": "1",
+          "metric": "Kritisch und offen",
+          "delta": "API seit 40 Minuten",
+          "sign": "down"
+        }
+      },
+      "social": {
+        "id": "social",
+        "category": "Social Media",
+        "value": "62.000",
+        "metric": "Reichweite, 7 Tage",
+        "delta": "+6 %",
+        "sign": "up",
+        "line": "Reichweite der letzten 7 Tage: 62.000, auf der LinkedIn-Seite.",
+        "also": null
+      },
+      "conversion": {
+        "id": "conversion",
+        "category": "Conversion",
+        "value": "17 %",
+        "metric": "Test zu zahlend",
+        "delta": "+1 Punkt",
+        "sign": "up",
+        "line": "17 % der Testkonten wurden zahlend. 31 von 180.",
+        "also": null
+      },
+      "retention": {
+        "id": "retention",
+        "category": "Retention",
+        "value": "94 %",
+        "metric": "Noch zahlend nach 90 Tagen",
+        "delta": "−1 Punkt",
+        "sign": "down",
+        "line": "94 % der zahlenden Kunden zahlen nach 90 Tagen noch.",
+        "also": null
+      },
+      "messages": {
+        "id": "messages",
+        "category": "Nachrichten",
+        "value": "9",
+        "metric": "Ungelesen",
+        "delta": "3 Konten",
+        "sign": "",
+        "line": "9 Nachrichten sind ungelesen.",
+        "also": null
+      },
+      "management": {
+        "id": "management",
+        "category": "Management",
+        "value": "7",
+        "metric": "Überfällige Aufgaben",
+        "delta": "älteste 6 Tage",
+        "sign": "",
+        "line": "7 delegierte Aufgaben sind über der Frist.",
+        "also": null
+      },
+      "todo": {
+        "id": "todo",
+        "category": "To-do",
+        "value": "2",
+        "metric": "Wichtig und dringend",
+        "delta": "von 8 Punkten",
+        "sign": "",
+        "line": "2 eigene Punkte sind wichtig und dringend.",
+        "also": null
+      }
+    },
+    "sheets": {
+      "finance": {
+        "headers": [
+          "Posten",
+          "Betrag"
+        ],
+        "rows": [
+          [
+            "Geschäftskonto",
+            "310.000 €"
+          ],
+          [
+            "Löhne, diese Woche",
+            "42.000 €"
+          ],
+          [
+            "Hosting, diese Woche",
+            "1.800 €"
+          ]
+        ],
+        "numeric": [
+          1
+        ]
+      },
+      "tickets": {
+        "headers": [
+          "Fall",
+          "Frist",
+          "Kanal"
+        ],
+        "rows": [
+          [
+            "Login, API-Fehler",
+            "3 Stunden über",
+            "Support"
+          ],
+          [
+            "Export bricht ab",
+            "1 Tag über",
+            "Support"
+          ],
+          [
+            "Rechnung Holm",
+            "heute",
+            "Firma"
+          ],
+          [
+            "Testkonto ohne Mail",
+            "2 Tage über",
+            "Support"
+          ]
+        ],
+        "numeric": []
+      },
+      "problems": {
+        "headers": [
+          "Quelle",
+          "Sache"
+        ],
+        "rows": [
+          [
+            "Produkt",
+            "API antwortet seit 40 Minuten mit Fehlern"
+          ]
+        ],
+        "numeric": []
+      },
+      "social": {
+        "headers": [
+          "Kanal",
+          "Reichweite"
+        ],
+        "rows": [
+          [
+            "LinkedIn",
+            "62.000"
+          ]
+        ],
+        "numeric": [
+          1
+        ]
+      },
+      "conversion": {
+        "headers": [
+          "Stufe",
+          "Anzahl"
+        ],
+        "rows": [
+          [
+            "Testkonten",
+            "180"
+          ],
+          [
+            "Aktiviert",
+            "96"
+          ],
+          [
+            "Zahlend",
+            "31"
+          ]
+        ],
+        "numeric": [
+          1
+        ]
+      },
+      "retention": {
+        "headers": [
+          "Kohorte",
+          "Noch zahlend"
+        ],
+        "rows": [
+          [
+            "Juli",
+            "96 %"
+          ],
+          [
+            "August",
+            "94 %"
+          ],
+          [
+            "September",
+            "94 %"
+          ]
+        ],
+        "numeric": [
+          1
+        ]
+      },
+      "messages": {
+        "headers": [
+          "Konto",
+          "Von",
+          "Inhalt"
+        ],
+        "rows": [
+          [
+            "Support",
+            "Kunde Holm",
+            "Export bricht ab"
+          ],
+          [
+            "Firma",
+            "Steuerbüro",
+            "Lohnunterlagen"
+          ],
+          [
+            "Intern",
+            "Mira",
+            "Fix liegt auf Staging"
+          ]
+        ],
+        "numeric": []
+      },
+      "management": {
+        "headers": [
+          "Aufgabe",
+          "Person",
+          "Status"
+        ],
+        "rows": [
+          [
+            "API-Fix",
+            "Mira",
+            "Angefangen"
+          ],
+          [
+            "Kundeninfo Holm",
+            "Jonas",
+            "Ausstehend"
+          ],
+          [
+            "Lohn freigeben",
+            "Jonas",
+            "Ausstehend"
+          ],
+          [
+            "Staging prüfen",
+            "Mira",
+            "Beendet"
+          ]
+        ],
+        "numeric": []
+      },
+      "todo": {
+        "headers": [
+          "Feld",
+          "Punkt"
+        ],
+        "rows": [
+          [
+            "Wichtig und dringend",
+            "API-Lage entscheiden"
+          ],
+          [
+            "Wichtig und dringend",
+            "Lohn freigeben"
+          ],
+          [
+            "Wichtig und nicht dringend",
+            "Preisliste Q4"
+          ],
+          [
+            "Nicht wichtig und dringend",
+            "Statusseite aktualisieren"
+          ]
+        ],
+        "numeric": []
+      }
+    }
+  },
+  "event": {
+    "company": "Atelier Süd",
+    "tiles": {
+      "finance": {
+        "id": "finance",
+        "category": "Finance",
+        "value": "96.500 €",
+        "metric": "Liquide Mittel",
+        "delta": "+8.400 €",
+        "sign": "up",
+        "line": "96.500 € liquide Mittel, 8.400 € über dem Vormonat.",
+        "also": null
+      },
+      "tickets": {
+        "id": "tickets",
+        "category": "Tickets & Probleme",
+        "value": "4",
+        "metric": "Überfällige Fälle",
+        "delta": "1 seit gestern",
+        "sign": "",
+        "line": "4 Rückfragen sind über der Frist. 3 Probleme sind kritisch. Location und Licht betreffen diese Woche.",
+        "also": {
+          "value": "3",
+          "metric": "Kritisch und offen",
+          "delta": "2 betreffen diese Woche",
+          "sign": ""
+        }
+      },
+      "social": {
+        "id": "social",
+        "category": "Social Media",
+        "value": "41.000",
+        "metric": "Reichweite, 7 Tage",
+        "delta": "−4 %",
+        "sign": "down",
+        "line": "Reichweite der letzten 7 Tage: 41.000.",
+        "also": null
+      },
+      "conversion": {
+        "id": "conversion",
+        "category": "Conversion",
+        "value": "26 %",
+        "metric": "Anfrage zu Mandat",
+        "delta": "+2 Punkte",
+        "sign": "up",
+        "line": "26 % der Anfragen wurden ein Mandat. 5 von 19.",
+        "also": null
+      },
+      "retention": {
+        "id": "retention",
+        "category": "Retention",
+        "value": "48 %",
+        "metric": "Folgemandat in 12 Monaten",
+        "delta": "+3 Punkte",
+        "sign": "up",
+        "line": "48 % der Auftraggeber haben in 12 Monaten ein weiteres Mandat erteilt.",
+        "also": null
+      },
+      "messages": {
+        "id": "messages",
+        "category": "Nachrichten",
+        "value": "22",
+        "metric": "Ungelesen",
+        "delta": "3 Konten",
+        "sign": "",
+        "line": "22 Nachrichten sind ungelesen.",
+        "also": null
+      },
+      "management": {
+        "id": "management",
+        "category": "Management",
+        "value": "8",
+        "metric": "Überfällige Aufgaben",
+        "delta": "älteste 2 Tage",
+        "sign": "",
+        "line": "8 delegierte Aufgaben sind über der Frist.",
+        "also": null
+      },
+      "todo": {
+        "id": "todo",
+        "category": "To-do",
+        "value": "4",
+        "metric": "Wichtig und dringend",
+        "delta": "von 15 Punkten",
+        "sign": "",
+        "line": "4 eigene Punkte sind wichtig und dringend.",
+        "also": null
+      }
+    },
+    "sheets": {
+      "finance": {
+        "headers": [
+          "Posten",
+          "Betrag"
+        ],
+        "rows": [
+          [
+            "Geschäftskonto",
+            "96.500 €"
+          ],
+          [
+            "Offene Fremdkosten",
+            "18.200 €"
+          ],
+          [
+            "Beauftragtes Honorar",
+            "64.000 €"
+          ]
+        ],
+        "numeric": [
+          1
+        ]
+      },
+      "tickets": {
+        "headers": [
+          "Fall",
+          "Frist",
+          "Kanal"
+        ],
+        "rows": [
+          [
+            "Location Hafen",
+            "1 Tag über",
+            "Auftraggeber"
+          ],
+          [
+            "Technikrider Linde",
+            "heute",
+            "Gewerk"
+          ],
+          [
+            "Gästeliste Körner",
+            "2 Tage über",
+            "Auftraggeber"
+          ],
+          [
+            "Anzahl Scheinwerfer",
+            "heute",
+            "Gewerk"
+          ]
+        ],
+        "numeric": []
+      },
+      "problems": {
+        "headers": [
+          "Quelle",
+          "Sache"
+        ],
+        "rows": [
+          [
+            "Location",
+            "Hafen sagt Donnerstag ab"
+          ],
+          [
+            "Technik",
+            "Licht noch unbestätigt"
+          ],
+          [
+            "Personal",
+            "Eine Schicht am Freitag offen"
+          ]
+        ],
+        "numeric": []
+      },
+      "social": {
+        "headers": [
+          "Kanal",
+          "Reichweite"
+        ],
+        "rows": [
+          [
+            "Instagram",
+            "28.000"
+          ],
+          [
+            "LinkedIn",
+            "13.000"
+          ]
+        ],
+        "numeric": [
+          1
+        ]
+      },
+      "conversion": {
+        "headers": [
+          "Stufe",
+          "Anzahl"
+        ],
+        "rows": [
+          [
+            "Anfragen",
+            "19"
+          ],
+          [
+            "Angebote",
+            "11"
+          ],
+          [
+            "Mandate",
+            "5"
+          ]
+        ],
+        "numeric": [
+          1
+        ]
+      },
+      "retention": {
+        "headers": [
+          "Jahrgang",
+          "Folgemandat"
+        ],
+        "rows": [
+          [
+            "2024",
+            "44 %"
+          ],
+          [
+            "2025",
+            "48 %"
+          ]
+        ],
+        "numeric": [
+          1
+        ]
+      },
+      "messages": {
+        "headers": [
+          "Konto",
+          "Von",
+          "Inhalt"
+        ],
+        "rows": [
+          [
+            "Auftraggeber",
+            "Linde",
+            "Rider fehlt noch"
+          ],
+          [
+            "Gewerk",
+            "Lichtwerk",
+            "Zwei Scheinwerfer offen"
+          ],
+          [
+            "Intern",
+            "Nora",
+            "Schichtplan liegt bereit"
+          ]
+        ],
+        "numeric": []
+      },
+      "management": {
+        "headers": [
+          "Aufgabe",
+          "Person",
+          "Status"
+        ],
+        "rows": [
+          [
+            "Location ersetzen",
+            "Nora",
+            "Angefangen"
+          ],
+          [
+            "Licht bestätigen",
+            "Paul",
+            "Ausstehend"
+          ],
+          [
+            "Schicht Freitag",
+            "Nora",
+            "Ausstehend"
+          ],
+          [
+            "Rider an Linde",
+            "Paul",
+            "Beendet"
+          ]
+        ],
+        "numeric": []
+      },
+      "todo": {
+        "headers": [
+          "Feld",
+          "Punkt"
+        ],
+        "rows": [
+          [
+            "Wichtig und dringend",
+            "Location heute entscheiden"
+          ],
+          [
+            "Wichtig und dringend",
+            "Licht freigeben"
+          ],
+          [
+            "Wichtig und dringend",
+            "Schicht Freitag besetzen"
+          ],
+          [
+            "Wichtig und dringend",
+            "Linde den Rider schicken"
+          ],
+          [
+            "Wichtig und nicht dringend",
+            "Herbstmappe"
+          ]
+        ],
+        "numeric": []
+      }
+    }
+  }
+}
