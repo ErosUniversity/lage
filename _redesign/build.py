@@ -1,8 +1,8 @@
-"""Build the three redesign versions from Robin's index.html.
+"""Build the B and C redesign drafts from Robin's original page (original.html).
 
 Only the <style> block and the fonts change; markup, data and script stay Robin's,
 so whichever version wins can go back upstream as a CSS-only change.
-A (Zeitung) won and now lives on its own in a/index.html with its own markup
+A (Zeitung) won and is now the main page, index.html, with its own markup
 and script changes, so only the B and C drafts are still built here.
 
     python3 _redesign/build.py
@@ -17,7 +17,7 @@ VERSIONS = {
     "c": ("Plakat", "Inter+Tight:wght@500;600;700;800;900"),
 }
 
-base = (ROOT / "index.html").read_text()
+base = (ROOT / "original.html").read_text()
 for key, (name, families) in VERSIONS.items():
     css = (ROOT / "_redesign" / f"{key}.css").read_text()
     head = (

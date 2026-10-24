@@ -22,12 +22,12 @@
   <header>
     <strong>Lage, drei Versionen</strong>
     <div class="tabs" role="tablist">
-      <button role="tab" data-v="index.html">Original</button>
-      <button role="tab" data-v="a/">A · Zeitung</button>
+      <button role="tab" data-v="original.html">Original</button>
+      <button role="tab" data-v="index.html">A · Zeitung</button>
       <button role="tab" data-v="b/">B · Leitstand</button>
       <button role="tab" data-v="c/">C · Plakat</button>
     </div>
-    <a id="open" href="a/" target="_blank">einzeln öffnen</a>
+    <a id="open" href="index.html" target="_blank">einzeln öffnen</a>
   </header>
   <iframe id="frame" title="Version"></iframe>
   <script>
@@ -40,8 +40,8 @@
       try { localStorage.setItem("lage-version", v); } catch (e) {}
     }
     document.querySelector(".tabs").addEventListener("click", (e) => { const b = e.target.closest("[data-v]"); if (b) show(b.dataset.v); });
-    let start = "a/";
-    try { start = localStorage.getItem("lage-version") || start; } catch (e) {}
+    let start = "index.html";
+    try { const saved = localStorage.getItem("lage-version"); if (saved && saved !== "a/") start = saved; } catch (e) {}
     show(start);
   </script>
 </body>
