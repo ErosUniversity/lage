@@ -51,6 +51,70 @@
     }
   });
 
+  // Ladeanimation bei jedem Seitenaufruf mit Versionsleiste: das Horn (das u) rollt nach rechts,
+  // wird dabei zum n und zum c und lässt an jedem Platz seinen Schatten stehen. Am Ende steht unc.
+  // Klick oder Taste überspringt; bei reduzierter Bewegung erscheint nur kurz das Logo.
+  document.documentElement.classList.add("unc-js");
+  if (document.body.hasAttribute("data-versions") && window.top === window.self) {
+    // Mitte jedes Buchstabens im Logo und das u um seine eigene Mitte gelegt.
+    const SPOTS = [[-36, -2, 0], [2, 2, 180], [40, 0, 450]];
+    const HORN = '<path d="M14 -10 L9.8 -10 A14 14 0 1 1 -9.8 -10 L-14 -10"/>';
+    const shadow = (letter) => '<g class="unc-shadow">' + LETTERS[letter] + "</g>";
+    const loader = document.createElement("div");
+    loader.className = "unc-loader";
+    loader.setAttribute("aria-hidden", "true");
+    loader.innerHTML = '<svg viewBox="-56 -20 112 40">' +
+      '<g fill="none" stroke="currentColor" stroke-width="4.5" stroke-linejoin="round">' +
+      shadow("u") + shadow("n") + shadow("c") + '<g class="unc-horn">' + HORN + "</g></g></svg>";
+    document.body.append(loader);
+    const shadows = loader.querySelectorAll(".unc-shadow");
+    const horn = loader.querySelector(".unc-horn");
+    const ease = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+    const place = (x, y, angle) => horn.setAttribute("transform", "translate(" + x + " " + y + ") rotate(" + angle + ")");
+    const LEG = 500;
+    let start = null;
+    let done = false;
+
+    function finish() {
+      if (done) return;
+      done = true;
+      shadows.forEach((s) => s.classList.add("unc-left", "unc-ink"));
+      horn.style.opacity = 0;
+      loader.classList.add("unc-out");
+      setTimeout(() => loader.remove(), 350);
+    }
+
+    function frame(now) {
+      if (done) return;
+      if (start === null) start = now;
+      const t = now - start;
+      const leg = Math.min(1, Math.floor(t / LEG));
+      if (t < 2 * LEG) {
+        const [x0, y0, a0] = SPOTS[leg];
+        const [x1, y1, a1] = SPOTS[leg + 1];
+        const k = ease((t - leg * LEG) / LEG);
+        place(x0 + (x1 - x0) * k, y0 + (y1 - y0) * k, a0 + (a1 - a0) * k);
+        shadows[leg].classList.add("unc-left");
+        requestAnimationFrame(frame);
+        return;
+      }
+      place(...SPOTS[2]);
+      shadows.forEach((s) => s.classList.add("unc-ink"));
+      setTimeout(finish, 450);
+    }
+
+    place(...SPOTS[0]);
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      shadows.forEach((s) => s.classList.add("unc-left", "unc-ink"));
+      horn.style.opacity = 0;
+      setTimeout(finish, 500);
+    } else {
+      requestAnimationFrame(frame);
+    }
+    addEventListener("keydown", finish, { once: true });
+    loader.addEventListener("click", finish);
+  }
+
   const OM = 136.1;
   const buttons = document.querySelectorAll("[data-om-sound]");
   let audio = null;

@@ -36,6 +36,36 @@ span.unc-logo {
 }
 .unc-versions select:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
 
+/* Ladeanimation (brand.js): das Horn rollt, die Schatten bleiben stehen. Die weiße Decke liegt ab dem
+   ersten Bild über der Seite, bis brand.js übernimmt; ohne JavaScript verschwindet sie nach 2,5 s selbst. */
+body[data-versions]::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  background: #fff;
+  animation: unc-cover 0s linear 2.5s forwards;
+}
+html.unc-js body[data-versions]::before { display: none; }
+@keyframes unc-cover { to { visibility: hidden; } }
+.unc-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: grid;
+  place-items: center;
+  background: #fff;
+  color: #111;
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+}
+.unc-loader svg { width: min(320px, 64vw); height: auto; overflow: visible; }
+.unc-shadow { color: #81d8d0; opacity: 0; transition: opacity 0.25s ease, color 0.3s ease; }
+.unc-shadow.unc-left { opacity: 1; }
+.unc-shadow.unc-ink { color: #111; }
+.unc-horn { transition: opacity 0.2s ease; }
+.unc-out { opacity: 0; pointer-events: none; }
+
 .om-sound {
   border: 1px solid currentColor;
   border-radius: 999px;
