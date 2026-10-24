@@ -19,7 +19,7 @@
   // Versionsleiste oben auf Seiten mit <body data-versions>: die Auswahl öffnet eine andere Aufmachung
   // und behält den offenen Bereich (#finance usw.). In versionen.html (iframe) bleibt sie weg.
   const SITE = new URL(".", document.currentScript.src);
-  const VERSIONS = [["index.html", "1 Newspaper"], ["b/", "2 Trade Republic"], ["c/", "3 Gen Z"], ["workspace/", "4 Workspace"]];
+  const VERSIONS = [["index.html", "1 Newspaper"], ["b/", "2 Trade Republic"], ["c/", "3 Gen Z"], ["workspace/", "4 Workspace"], ["welcome/", "5 Workerbee"]];
   if (document.body.hasAttribute("data-versions") && window.top === window.self) {
     const here = location.pathname.replace(/index\.html$/, "");
     const options = VERSIONS.map(([path, name]) => {
