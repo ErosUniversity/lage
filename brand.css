@@ -14,6 +14,28 @@ span.unc-logo {
   50% { transform: scale(1.08); }
 }
 
+.unc-versions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 16px;
+  background: #111;
+  color: #fff;
+  border-bottom: 1px solid #2a2a2a;
+  font: 500 13px/1.2 system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+.unc-versions label { opacity: 0.7; }
+.unc-versions select {
+  padding: 5px 10px;
+  border: 0;
+  border-radius: 8px;
+  background: #fff;
+  color: #111;
+  font: inherit;
+  cursor: pointer;
+}
+.unc-versions select:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+
 .om-sound {
   border: 1px solid currentColor;
   border-radius: 999px;

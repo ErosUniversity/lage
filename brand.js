@@ -18,6 +18,29 @@
         '<g transform="translate(135.5 0) rotate(90)">' + U + "</g>"
     }
   };
+  // Versionsleiste oben auf Seiten mit <body data-versions>: die Auswahl öffnet eine andere Aufmachung
+  // und behält den offenen Bereich (#finance usw.). In versionen.html (iframe) bleibt sie weg.
+  const SITE = new URL(".", document.currentScript.src);
+  const VERSIONS = [["index.html", "1 Newspaper"], ["b/", "2 Trade Republic"], ["c/", "3 Gen Z"]];
+  if (document.body.hasAttribute("data-versions") && window.top === window.self) {
+    const here = location.pathname.replace(/index\.html$/, "");
+    const options = VERSIONS.map(([path, name]) => {
+      const url = new URL(path, SITE);
+      const current = url.pathname.replace(/index\.html$/, "") === here;
+      return '<option value="' + url.href + '"' + (current ? " selected" : "") + ">" + name + "</option>";
+    });
+    const known = options.some((option) => option.includes(" selected"));
+    const bar = document.createElement("div");
+    bar.className = "unc-versions";
+    bar.innerHTML = '<span class="unc-logo" data-unc="mark" style="--unc-h: 16px"></span>' +
+      '<label for="unc-version">Version</label>' +
+      '<select id="unc-version">' + (known ? "" : '<option value="" selected disabled>Original</option>') + options.join("") + "</select>";
+    document.body.prepend(bar);
+    bar.querySelector("select").addEventListener("change", (event) => {
+      if (event.target.value) location.href = event.target.value + location.hash;
+    });
+  }
+
   document.querySelectorAll("[data-unc]").forEach((el) => {
     const logo = LOGOS[el.dataset.unc];
     if (!logo) return;
