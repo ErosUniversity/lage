@@ -2,6 +2,8 @@
 
 Only the <style> block and the fonts change; markup, data and script stay Robin's,
 so whichever version wins can go back upstream as a CSS-only change.
+A (Zeitung) won and now lives on its own in a/index.html with its own markup
+and script changes, so only the B and C drafts are still built here.
 
     python3 _redesign/build.py
 """
@@ -11,7 +13,6 @@ import re
 ROOT = Path(__file__).resolve().parent.parent
 FONTS = "https://fonts.googleapis.com/css2?family="
 VERSIONS = {
-    "a": ("Zeitung", "Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&family=Inter:wght@400;500"),
     "b": ("Leitstand", "JetBrains+Mono:wght@400;500&family=Inter:wght@400;500;600"),
     "c": ("Plakat", "Inter+Tight:wght@500;600;700;800;900"),
 }

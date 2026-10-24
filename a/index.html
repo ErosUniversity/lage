@@ -17,8 +17,27 @@
       --hair: #cfc8bb;
       --good: #1d6b43;
       --bad: #a3271b;
+      --hover: #ebe6db;
+      --scrim: rgba(20, 19, 16, 0.3);
       --serif: "Newsreader", Georgia, serif;
       --sans: "Inter", system-ui, -apple-system, sans-serif;
+      color-scheme: light;
+    }
+    /* Nachtausgabe: dark paper, follows the system setting */
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #191712;
+        --ink: #ebe5d6;
+        --muted: #aaa293;
+        --faint: #7c7568;
+        --hair: #3a362e;
+        --good: #86c79f;
+        --bad: #ee8f80;
+        --hover: #211f19;
+        --scrim: rgba(0, 0, 0, 0.55);
+        color-scheme: dark;
+      }
+      .dateline::after { content: " · Nachtausgabe"; }
     }
 
     * { box-sizing: border-box; }
@@ -60,13 +79,15 @@
       padding-bottom: 14px;
       border-bottom: 1px solid var(--ink);
     }
+    .brand-meta { grid-area: k; margin-bottom: 6px; }
     .brand-kicker {
-      grid-area: k;
-      margin: 0 0 6px;
-      font: italic 400 15px/1 var(--serif);
+      margin: 0;
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
       color: var(--muted);
     }
-    .brand-kicker::after { content: " · Ausgabe von heute"; }
+    .dateline { margin: 4px 0 0; font: italic 400 15px/1.2 var(--serif); color: var(--muted); }
     .brand-name {
       grid-area: n;
       margin: 0;
@@ -145,13 +166,13 @@
     .tile {
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
+      justify-content: flex-start;
       min-height: 176px;
       padding: 14px 16px 16px;
       background: var(--bg);
       transition: background 120ms;
     }
-    .tile:hover { background: #ebe6db; }
+    .tile:hover { background: var(--hover); }
     .tile[href="#finance"] { grid-column: span 2; grid-row: span 2; }
     .tile[href="#tickets"] { grid-column: span 2; }
     .tile-cat {
@@ -160,9 +181,10 @@
       text-transform: uppercase;
       font-weight: 500;
     }
+    .tile-group { display: block; margin-bottom: 3px; color: var(--faint); }
     .tile-value {
       display: block;
-      margin-top: 24px;
+      margin-top: 22px;
       font: 400 46px/1 var(--serif);
       letter-spacing: -0.02em;
       font-variant-numeric: lining-nums tabular-nums;
@@ -170,18 +192,25 @@
     .tile[href="#finance"] .tile-value { font-size: 104px; letter-spacing: -0.04em; }
     .tile-meta {
       display: flex;
-      justify-content: space-between;
-      gap: 12px;
+      flex-direction: column;
       margin-top: 8px;
       font: italic 400 15px/1.3 var(--serif);
       color: var(--muted);
     }
-    .tile[href="#finance"] .tile-meta { font-size: 19px; }
+    .tile[href="#finance"] .tile-meta { flex-direction: row; justify-content: space-between; gap: 12px; font-size: 19px; }
+    .tile-meta > span:last-child { white-space: nowrap; }
+    .tile-dek {
+      display: block;
+      max-width: 30ch;
+      margin-top: auto;
+      padding-top: 22px;
+      font: 400 23px/1.3 var(--serif);
+      letter-spacing: -0.005em;
+    }
     .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 18px; }
     .pair > span + span { border-left: 1px solid var(--hair); padding-left: 20px; }
     .pair .tile-value { margin-top: 0; }
-    .pair .tile-meta { flex-direction: column; gap: 0; }
-    .up { color: var(--good); }
+        .up { color: var(--good); }
     .down { color: var(--bad); }
 
     /* detail page */
@@ -194,6 +223,7 @@
       color: var(--muted);
     }
     .sheet h1 { margin: 8px 0 0; font: 500 52px/1 var(--serif); letter-spacing: -0.025em; }
+    .sheet-dek { max-width: 36ch; margin: 14px 0 0; font: italic 400 22px/1.35 var(--serif); color: var(--muted); }
     .sheet-value {
       margin: 28px 0 0;
       font: 400 96px/0.95 var(--serif);
@@ -298,7 +328,7 @@
       border: 0; border-radius: 50%;
       background: transparent;
     }
-    .icon-btn:hover { background: rgba(20, 19, 16, 0.07); }
+    .icon-btn:hover { background: var(--hover); }
     .icon-btn[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
     #send { background: var(--ink); color: var(--bg); }
     #send:disabled { opacity: 0.25; }
@@ -334,17 +364,19 @@
       }
       .rail.open { transform: none; }
       .brand { display: block; border: 0; padding: 0; }
-      .brand-kicker::after { content: ""; }
       .brand-name { font-size: 40px; text-align: left; margin-top: 6px; }
-      .seg { justify-content: flex-start; margin-top: 14px; }
+      .seg { justify-self: stretch; justify-content: flex-start; margin-top: 14px; }
       nav { flex-direction: column; gap: 14px; padding: 0; }
       .group { flex-direction: column; gap: 6px; }
-      .backdrop.show { display: block; position: fixed; inset: 0; z-index: 3; background: rgba(20, 19, 16, 0.3); }
+      .backdrop.show { display: block; position: fixed; inset: 0; z-index: 3; background: var(--scrim); }
       .stage { padding-top: 18px; }
       .workspace { grid-template-columns: 1fr; }
       .frame { padding-right: 0; border-right: 0; }
       .chat-panel { padding-left: 0; margin-top: 28px; min-height: 480px; }
-      .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); border-top: 0; }
+      .sheet { border-top: 0; padding-top: 0; }
+      .tile-dek { font-size: 19px; padding-top: 14px; }
+      .sheet-dek { font-size: 19px; }
       .tile[href="#finance"] { grid-row: auto; }
       .tile { min-height: 140px; }
       .tile-value { font-size: 34px; margin-top: 16px; }
@@ -371,7 +403,10 @@
   <div class="app">
     <aside class="rail" id="rail">
       <div class="brand">
-        <p class="brand-kicker">Lage</p>
+        <div class="brand-meta">
+          <p class="brand-kicker">Lage</p>
+          <p class="dateline" id="dateline"></p>
+        </div>
         <p class="brand-name" id="company">Heft &amp; Bogen</p>
         <div class="seg" role="tablist" aria-label="Betrieb">
           <button type="button" role="tab" data-pack="buch" aria-selected="true">Buchladen</button>
@@ -531,6 +566,7 @@
     const sendBtn = document.getElementById("send");
     const rail = document.getElementById("rail");
     const backdrop = document.getElementById("backdrop");
+    document.getElementById("dateline").textContent = new Date().toLocaleDateString("de-DE", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
 
     function esc(value) {
       return String(value).replace(/[&<>"']/g, (ch) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch]));
@@ -585,12 +621,13 @@
     function renderTile(item) {
       if (item.also) {
         return '<a class="tile" href="#' + item.id + '">' +
-          '<span class="tile-cat">' + esc(item.category) + "</span>" +
+          '<span class="tile-cat"><span class="tile-group">' + esc(GROUPS[item.id]) + "</span>" + esc(item.category) + "</span>" +
           '<span class="pair">' + metricBlock(item) + metricBlock(item.also) + "</span></a>";
       }
       return '<a class="tile" href="#' + item.id + '">' +
-        '<span class="tile-cat">' + esc(item.category) + "</span>" +
+        '<span class="tile-cat"><span class="tile-group">' + esc(GROUPS[item.id]) + "</span>" + esc(item.category) + "</span>" +
         metricBlock(item) +
+        (item.id === "finance" ? '<span class="tile-dek">' + esc(item.line) + "</span>" : "") +
         "</a>";
     }
 
@@ -605,6 +642,7 @@
       if (item.also) {
         const alsoSign = item.also.sign ? " " + item.also.sign : "";
         return '<article class="sheet"><p class="sheet-kicker">' + esc(GROUPS[item.id]) + "</p><h1>" + esc(item.category) + "</h1>" +
+          '<p class="sheet-dek">' + esc(item.line) + "</p>" +
           '<div class="pair"><span><p class="sheet-value">' + esc(item.value) + '</p><p class="sheet-metric">' + esc(item.metric) + ' · <span class="' + sign.trim() + '">' + esc(item.delta) + "</span></p></span>" +
           '<span><p class="sheet-value">' + esc(item.also.value) + '</p><p class="sheet-metric">' + esc(item.also.metric) + ' · <span class="' + alsoSign.trim() + '">' + esc(item.also.delta) + "</span></p></span></div>" +
           "<h2 class=\"sheet-kicker\">Tickets</h2>" + tableHtml(dash().sheets.tickets) +
@@ -612,6 +650,7 @@
           "</article>";
       }
       return '<article class="sheet"><p class="sheet-kicker">' + esc(GROUPS[item.id]) + "</p><h1>" + esc(item.category) + "</h1>" +
+          '<p class="sheet-dek">' + esc(item.line) + "</p>" +
         '<p class="sheet-value">' + esc(item.value) + "</p>" +
         '<p class="sheet-metric">' + esc(item.metric) + ' · <span class="' + sign.trim() + '">' + esc(item.delta) + "</span></p>" +
         tableHtml(dash().sheets[item.id]) + "</article>";
