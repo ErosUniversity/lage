@@ -4,24 +4,22 @@
 //   [data-om-chime]  die Chat-Liste, Wert ist der Selektor für Agent-Nachrichten
 // Klang: Netzbrummen (50 Hz) geht in ein Om (136,1 Hz) über. Startet nur nach Klick.
 (() => {
-  // Ein Zeichen für alles: Ring, oben offen, beide Enden mit einer Lasche und runder Nase nach innen.
-  // n ist das U um 180° gedreht, c um 90°.
-  const U = '<path d="M-20.205 -12A23.5 23.5 0 1 0 20.205 -12L12.462 -12A17.3 17.3 0 1 1 -12.462 -12Z"/>' +
-    '<path d="M-20.205 -17H-13.5A2.55 2.55 0 0 1 -13.5 -11.9H-20.205Z"/>' +
-    '<path d="M20.205 -17H13.5A2.55 2.55 0 0 0 13.5 -11.9H20.205Z"/>';
+  // Offizielles unc-Logo, wie workspace/assets/unc-wordmark-black.svg: drei Bögen mit flachen Füßen,
+  // als Linie gezeichnet. Das U allein ist das Icon.
+  const LINE = '<g fill="none" stroke="currentColor" stroke-width="4.5" stroke-linejoin="round">';
+  const LETTERS = {
+    u: '<path d="M-22 -12 L-26.2 -12 A14 14 0 1 1 -45.8 -12 L-50 -12"/>',
+    n: '<path d="M-12 12 L-7.8 12 A14 14 0 1 1 11.8 12 L16 12"/>',
+    c: '<path d="M50 14 L50 9.8 A14 14 0 1 1 50 -9.8 L50 -14"/>'
+  };
   const LOGOS = {
-    mark: { box: [-23.5, -17, 47, 40.5], body: U },
-    wordmark: {
-      box: [0, -23.5, 152.5, 47],
-      body: '<g transform="translate(23.5 -3.25)">' + U + "</g>" +
-        '<g transform="translate(79.5 3.25) rotate(180)">' + U + "</g>" +
-        '<g transform="translate(135.5 0) rotate(90)">' + U + "</g>"
-    }
+    mark: { box: [-52.5, -14.5, 33, 29], body: LINE + LETTERS.u + "</g>" },
+    wordmark: { box: [-56, -20, 112, 40], body: LINE + LETTERS.u + LETTERS.n + LETTERS.c + "</g>" }
   };
   // Versionsleiste oben auf Seiten mit <body data-versions>: die Auswahl öffnet eine andere Aufmachung
   // und behält den offenen Bereich (#finance usw.). In versionen.html (iframe) bleibt sie weg.
   const SITE = new URL(".", document.currentScript.src);
-  const VERSIONS = [["index.html", "1 Newspaper"], ["b/", "2 Trade Republic"], ["c/", "3 Gen Z"]];
+  const VERSIONS = [["index.html", "1 Newspaper"], ["b/", "2 Trade Republic"], ["c/", "3 Gen Z"], ["workspace/", "4 Workspace"]];
   if (document.body.hasAttribute("data-versions") && window.top === window.self) {
     const here = location.pathname.replace(/index\.html$/, "");
     const options = VERSIONS.map(([path, name]) => {
@@ -36,6 +34,7 @@
       '<label for="unc-version">Version</label>' +
       '<select id="unc-version">' + (known ? "" : '<option value="" selected disabled>Original</option>') + options.join("") + "</select>";
     document.body.prepend(bar);
+    document.documentElement.style.setProperty("--unc-bar", bar.offsetHeight + "px");
     bar.querySelector("select").addEventListener("change", (event) => {
       if (event.target.value) location.href = event.target.value + location.hash;
     });
@@ -145,9 +144,12 @@
 
   document.querySelectorAll("[data-om-chime]").forEach((list) => {
     const selector = list.dataset.omChime;
-    new MutationObserver((records) => {
-      const added = records.some((record) => [...record.addedNodes].some((node) => node.nodeType === 1 && node.matches(selector)));
-      if (added) playChime();
+    // Chats zeichnen oft den ganzen Verlauf neu; geklingelt wird nur, wenn eine Agent-Nachricht dazukommt.
+    let seen = list.querySelectorAll(selector).length;
+    new MutationObserver(() => {
+      const count = list.querySelectorAll(selector).length;
+      if (count > seen) playChime();
+      seen = count;
     }).observe(list, { childList: true });
   });
 

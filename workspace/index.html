@@ -59,8 +59,15 @@ main{height:100vh;overflow-y:auto;overscroll-behavior:contain}.topbar{background
 @media(max-width:1050px){.subscription-row{grid-template-columns:26px minmax(115px,1fr) minmax(140px,1fr) 75px 68px;gap:8px}.subscription-rate span{font-size:7px}}
 @media(max-width:760px){.subscription-hub-head{align-items:flex-start}.subscription-row{grid-template-columns:26px minmax(95px,1fr) minmax(120px,1fr) 70px;gap:7px}.subscription-saving{display:none}.billing-summary{align-items:flex-start;flex-direction:column;gap:3px}}
 </style>
+<link rel="stylesheet" href="../brand.css">
+<script src="../brand.js" defer></script>
+<style>
+/* unc-Versionsleiste oben: die bildschirmhohe Arbeitsfläche um die Leiste kürzen */
+body[data-versions] .app, body[data-versions] .sidebar, body[data-versions] main, body[data-versions] .agent-panel { height: calc(100dvh - var(--unc-bar, 0px)); min-height: 0; }
+.sidebar-foot .om-sound { align-self: flex-start; margin-bottom: 10px; }
+</style>
 </head>
-<body>
+<body data-versions>
 <div class="app">
 <aside class="sidebar" id="sidebar">
   <div class="brand"><img src="assets/unc-wordmark-black.svg" alt="UNC"><span class="brand-name">COMPANY INTELLIGENCE</span></div>
@@ -72,7 +79,7 @@ main{height:100vh;overflow-y:auto;overscroll-behavior:contain}.topbar{background
     <div class="nav-group"><div class="nav-label">Execution</div><button class="nav-item" data-view="team"><span class="nav-ico">✉</span>Messages</button><button class="nav-item" data-view="team"><span class="nav-ico">⊙</span>Management</button><button class="nav-item" data-view="team"><span class="nav-ico">☑</span>To-do</button></div>
     <div class="nav-group"><div class="nav-label">Configure</div><button class="nav-item" data-view="connections"><span class="nav-ico">⤷</span>Data connections</button><button class="nav-item" data-view="billing"><span class="nav-ico">▤</span>Subscription</button></div>
   </nav>
-  <div class="sidebar-foot"><div class="plan-mini"><strong id="sidePlan">UNC workspace</strong><p id="sidePlanNote">Connect company data sources</p><button class="text-btn" data-go="billing">Explore plans →</button></div><div class="user"><span class="avatar" id="avatar">RO</span><span id="userLabel">Robert · Workspace owner</span></div></div>
+  <div class="sidebar-foot"><button class="om-sound" type="button" data-om-sound data-on="Sound on" data-off="Sound off" aria-pressed="false">Sound off</button><div class="plan-mini"><strong id="sidePlan">UNC workspace</strong><p id="sidePlanNote">Connect company data sources</p><button class="text-btn" data-go="billing">Explore plans →</button></div><div class="user"><span class="avatar" id="avatar">RO</span><span id="userLabel">Robert · Workspace owner</span></div></div>
 </aside>
 <main id="main">
   <header class="topbar"><div style="display:flex;align-items:center;gap:12px"><button class="icon-button mobile-menu" id="menu" aria-label="Open menu">☰</button><span class="crumb">UNC&nbsp; / &nbsp;<span id="crumbView">OVERVIEW</span></span></div><div class="top-right"><span class="connection" id="fabricLabel">COMPANY WORKSPACE</span><span class="live" id="systemStatus"><i></i> WORKSPACE</span><button class="icon-button" id="authButton">CONNECT COMPANY</button><button class="icon-button" data-go="billing">PLANS</button></div></header>
@@ -131,7 +138,7 @@ main{height:100vh;overflow-y:auto;overscroll-behavior:contain}.topbar{background
   </div>
   <p class="agent-disclaimer">Your workspace assistant · Ask for analysis, priorities, or a draft for review.</p>
  </div>
- <div class="conversation-scroll" id="thread" aria-live="polite"></div>
+ <div class="conversation-scroll" id="thread" aria-live="polite" data-om-chime=".message.assistant"></div>
  <form class="prompt-box" data-composer><textarea rows="2" placeholder="Message Agent…" aria-label="Message Agent"></textarea><div class="prompt-tools"><span class="prompt-hint">Company intelligence</span><div class="prompt-actions"><button class="quiet-btn" type="button" data-attach>＋ Context</button><button class="send-btn" type="submit" disabled>Send&nbsp; ↗</button></div></div></form>
 </aside>
 </div><div class="toast" id="toast" role="status"></div>
