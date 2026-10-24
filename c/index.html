@@ -375,9 +375,12 @@
       return { headers, rows, numeric };
     }
 
+    // change: relative Veränderung je Bereich, bestimmt die Kachelgröße. Aus den Kacheln abgeleitet;
+    // für Nachrichten, Management und To-do sind die Vorwerte ausgedacht.
     const DATA = {
       buch: {
         company: "Heft & Bogen",
+        change: { finance: 0.052, tickets: 0.5, social: 0.12, conversion: -0.067, retention: 0.033, messages: 0.4, management: 0.25, todo: 0 },
         tiles: {
           finance: tile("finance", "Finance", "42.800 €", "Liquide Mittel", "+2.100 €", "up", "42.800 € liquide Mittel, 2.100 € über dem Vormonat."),
           tickets: tile("tickets", "Tickets & Probleme", "6", "Überfällige Fälle", "2 seit gestern", "", "6 Fälle sind über der Frist. 2 Probleme sind kritisch. Eines ist der fehlende Nachtzug.", { value: "2", metric: "Kritisch und offen", delta: "1 in der Lieferkette", sign: "" }),
@@ -402,6 +405,7 @@
       },
       software: {
         company: "Nordkap",
+        change: { finance: -0.055, tickets: 0.571, social: 0.06, conversion: 0.063, retention: -0.011, messages: -0.25, management: 0.4, todo: -0.333 },
         tiles: {
           finance: tile("finance", "Finance", "310.000 €", "Liquide Mittel", "−18.000 €", "down", "310.000 € liquide Mittel, 18.000 € unter dem Vormonat."),
           tickets: tile("tickets", "Tickets & Probleme", "11", "Überfällige Fälle", "4 seit gestern", "", "11 Supportfälle sind über der Antwortfrist. 1 Problem ist kritisch: die API antwortet seit 40 Minuten mit Fehlern.", { value: "1", metric: "Kritisch und offen", delta: "API seit 40 Minuten", sign: "down" }),
@@ -426,6 +430,7 @@
       },
       event: {
         company: "Atelier Süd",
+        change: { finance: 0.095, tickets: 0.333, social: -0.04, conversion: 0.083, retention: 0.067, messages: 0.467, management: 0, todo: 1 },
         tiles: {
           finance: tile("finance", "Finance", "96.500 €", "Liquide Mittel", "+8.400 €", "up", "96.500 € liquide Mittel, 8.400 € über dem Vormonat."),
           tickets: tile("tickets", "Tickets & Probleme", "4", "Überfällige Fälle", "1 seit gestern", "", "4 Rückfragen sind über der Frist. 3 Probleme sind kritisch. Location und Licht betreffen diese Woche.", { value: "3", metric: "Kritisch und offen", delta: "2 betreffen diese Woche", sign: "" }),
