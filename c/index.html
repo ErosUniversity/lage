@@ -3,23 +3,28 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Lage · Plakat</title>
+  <title>Lage · Founder</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;600;700;800;900&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Permanent+Marker&display=swap">
   <style>
-    /* C · Plakat: Swiss poster, one colour field per group, one row per group */
+    /* C · Founder: shitposty, lowercase everything, stickers on graph paper, group chat */
     :root {
-      --bg: #f6f4ef;
-      --ink: #0f0f0f;
-      --muted: #555;
-      --white: #fff;
-      --lage: #e8361f;
-      --wachstum: #2346d9;
-      --handeln: #ffcf2e;
-      --good: #0f0f0f;
-      --bad: #0f0f0f;
-      --sans: "Inter Tight", "Helvetica Neue", Helvetica, Arial, sans-serif;
+      --paper: #fffaf0;
+      --ink: #111;
+      --muted: #6b665c;
+      --lime: #c6ff3d;
+      --orange: #ffb35c;
+      --pink: #ff9ad5;
+      --sky: #8fd3ff;
+      --lilac: #c9b6ff;
+      --yellow: #ffe14d;
+      --mint: #8ff0c0;
+      --coral: #ff8a7a;
+      --blue: #2f7bff;
+      --sans: "Bricolage Grotesque", system-ui, sans-serif;
+      --marker: "Permanent Marker", "Comic Sans MS", cursive;
+      color-scheme: light;
     }
 
     * { box-sizing: border-box; }
@@ -27,21 +32,35 @@
     body {
       font-family: var(--sans);
       color: var(--ink);
-      background: var(--bg);
+      background-color: var(--paper);
+      background-image:
+        linear-gradient(rgba(17, 17, 17, 0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(17, 17, 17, 0.06) 1px, transparent 1px);
+      background-size: 24px 24px;
       font-size: 15px;
       line-height: 1.35;
+      text-transform: lowercase;
     }
-    button, textarea { font: inherit; color: inherit; }
-    button, a.nav-btn, a.tile { cursor: pointer; }
-    a.nav-btn, a.tile { text-decoration: none; color: inherit; }
+    button, textarea { font: inherit; color: inherit; text-transform: inherit; }
+    button, a { cursor: pointer; }
+    a { text-decoration: none; color: inherit; }
     :focus { outline: none; }
-    :focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; }
+    :focus-visible { outline: 3px dashed var(--ink); outline-offset: 3px; }
     .sr {
       position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
       overflow: hidden; clip: rect(0, 0, 0, 0); border: 0;
     }
 
-    .app { display: grid; grid-template-columns: 240px minmax(0, 1fr); min-height: 100%; }
+    .c-lime { --c: var(--lime); }
+    .c-orange { --c: var(--orange); }
+    .c-pink { --c: var(--pink); }
+    .c-sky { --c: var(--sky); }
+    .c-lilac { --c: var(--lilac); }
+    .c-yellow { --c: var(--yellow); }
+    .c-mint { --c: var(--mint); }
+    .c-coral { --c: var(--coral); }
+
+    .app { display: grid; grid-template-columns: 250px minmax(0, 1fr); min-height: 100%; }
 
     .rail {
       position: sticky;
@@ -50,171 +69,208 @@
       overflow: auto;
       display: flex;
       flex-direction: column;
-      gap: 28px;
-      padding: 24px 18px 18px;
+      gap: 26px;
+      padding: 22px 18px 18px;
       background: var(--ink);
-      color: var(--white);
+      color: var(--paper);
     }
-    .brand-kicker {
-      margin: 0;
-      font: 900 56px/0.85 var(--sans);
-      letter-spacing: -0.05em;
-      text-transform: lowercase;
-    }
-    .brand-kicker::after { content: "."; color: var(--lage); }
-    .brand-name { margin: 12px 0 0; font: 600 15px var(--sans); }
-    .seg { display: flex; flex-direction: column; gap: 4px; margin-top: 16px; }
+    .brand-kicker { margin: 0; font: 400 38px/1 var(--marker); color: var(--lime); transform: rotate(-3deg); transform-origin: left; }
+    .brand-kicker span { display: block; margin-top: 6px; font: 600 12px var(--sans); color: rgba(255, 250, 240, 0.6); }
+    .brand-name { margin: 14px 0 0; font-size: 17px; font-weight: 800; }
+    .seg { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
     .seg button {
-      border: 2px solid var(--white);
+      border: 2px solid var(--paper);
+      border-radius: 999px;
       background: none;
-      padding: 6px 10px;
-      text-align: left;
-      font: 700 12px var(--sans);
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
+      padding: 4px 10px;
+      font-size: 13px;
+      font-weight: 700;
     }
-    .seg button:hover { background: rgba(255, 255, 255, 0.12); }
-    .seg button[aria-selected="true"] { background: var(--white); color: var(--ink); }
+    .seg button:hover { background: rgba(255, 250, 240, 0.12); }
+    .seg button[aria-selected="true"] { background: var(--lime); border-color: var(--lime); color: var(--ink); transform: rotate(-2deg); }
 
-    nav { display: flex; flex-direction: column; gap: 18px; }
-    .group { display: flex; flex-direction: column; gap: 0; }
-    .group-label {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin: 0 0 4px;
-      font: 700 11px var(--sans);
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: rgba(255, 255, 255, 0.55);
-    }
-    .group-label::before { content: ""; width: 12px; height: 12px; background: var(--c); }
-    .group:nth-child(2) { --c: var(--lage); }
-    .group:nth-child(3) { --c: var(--wachstum); }
-    .group:nth-child(4) { --c: var(--handeln); }
-    .nav-btn { padding: 4px 0 4px 20px; font: 600 16px var(--sans); letter-spacing: -0.01em; }
-    .nav-btn:hover { color: var(--c, var(--white)); }
-    .group:first-child .nav-btn { padding-left: 0; font-size: 20px; font-weight: 800; }
-    .nav-btn[aria-current="page"] { text-decoration: underline; text-decoration-thickness: 3px; text-underline-offset: 5px; text-decoration-color: var(--c, var(--white)); }
-    .note { margin-top: auto; font: 700 11px var(--sans); letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255, 255, 255, 0.4); }
+    nav { display: flex; flex-direction: column; gap: 16px; }
+    .group { display: flex; flex-direction: column; align-items: flex-start; gap: 1px; }
+    .group-label { margin: 0 0 2px; font: 400 15px var(--marker); color: var(--pink); }
+    .nav-btn { padding: 3px 6px; margin-left: -6px; font-size: 16px; font-weight: 700; border-radius: 6px; }
+    .nav-btn:hover { background: rgba(255, 250, 240, 0.12); }
+    .nav-btn[aria-current="page"] { background: var(--lime); color: var(--ink); transform: rotate(-1.5deg); }
+    .note { margin-top: auto; font-size: 12px; font-weight: 600; color: rgba(255, 250, 240, 0.5); }
 
     main { min-width: 0; min-height: 100vh; display: flex; flex-direction: column; }
+    .ticker { overflow: hidden; background: var(--lime); border-bottom: 2.5px solid var(--ink); }
+    .ticker-track { display: inline-flex; white-space: nowrap; animation: ticker 32s linear infinite; }
+    .ticker-track span { padding: 7px 0; font-size: 13px; font-weight: 800; }
+    .ticker-track span::after { content: "✦"; margin: 0 16px; }
+    @keyframes ticker { to { transform: translateX(-50%); } }
     .topbar {
       display: none;
       align-items: center;
       gap: 12px;
       padding: 12px 16px;
       background: var(--ink);
-      color: var(--white);
+      color: var(--paper);
     }
-    .menu-btn { border: 2px solid var(--white); background: none; padding: 5px 10px; font: 700 12px var(--sans); text-transform: uppercase; }
-    .stage { padding: 24px; }
+    .topbar strong { font-size: 18px; font-weight: 800; }
+    .menu-btn { border: 2px solid var(--paper); border-radius: 999px; background: none; padding: 4px 12px; font-weight: 700; }
+    .stage { padding: 30px 32px 48px; }
     .workspace {
       display: grid;
       grid-template-columns: minmax(0, 1fr) 340px;
-      gap: 24px;
-      align-items: stretch;
-      max-width: 1320px;
+      gap: 34px;
+      align-items: start;
+      max-width: 1260px;
       margin: 0 auto;
     }
     .frame { min-width: 0; }
 
-    /* three rows: Lage, Wachstum, Handeln */
-    .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
-    .tile {
+    .hey { margin: 0; font-size: clamp(34px, 5vw, 52px); font-weight: 800; line-height: 1; letter-spacing: -0.035em; }
+    .sub {
+      display: inline-block;
+      margin: 12px 0 30px;
+      padding: 2px 8px;
+      background: var(--yellow);
+      font: 400 21px var(--marker);
+      transform: rotate(-1.5deg);
+    }
+
+    /* stickers */
+    .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px 22px; }
+    .sticker {
+      container-type: inline-size;
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
-      min-height: 200px;
-      padding: 14px 16px 16px;
-      background: var(--lage);
-      color: var(--white);
-      transition: transform 120ms ease;
-    }
-    .tile:hover { transform: translateY(-3px); }
-    .tile[href="#tickets"] { grid-column: span 2; }
-    .tile[href="#social"], .tile[href="#conversion"], .tile[href="#retention"] { background: var(--wachstum); }
-    .tile[href="#messages"], .tile[href="#management"], .tile[href="#todo"] { background: var(--handeln); color: var(--ink); }
-    .tile-cat { font: 800 18px/1.1 var(--sans); letter-spacing: -0.01em; }
-    .tile-value {
-      display: block;
-      margin-top: 24px;
-      font: 900 64px/0.9 var(--sans);
-      letter-spacing: -0.055em;
-      font-variant-numeric: tabular-nums lining-nums;
-    }
-    .tile-meta {
-      display: flex;
-      justify-content: space-between;
       gap: 12px;
-      margin-top: 10px;
-      padding-top: 8px;
-      border-top: 2px solid currentColor;
-      font: 600 13px var(--sans);
+      min-height: 190px;
+      padding: 14px 16px 16px;
+      background: var(--c);
+      border: 2.5px solid var(--ink);
+      border-radius: 18px;
+      box-shadow: 5px 5px 0 var(--ink);
+      transform: rotate(var(--tilt, 0deg));
+      transition: transform 140ms ease, box-shadow 140ms ease;
     }
-    .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 24px; }
-    .pair .tile-value { margin-top: 0; }
-    .pair .tile-meta { flex-direction: column; gap: 0; }
-    .up::before { content: "↑ "; }
-    .down::before { content: "↓ "; }
+    .sticker:hover { transform: rotate(0deg) translate(-2px, -2px); box-shadow: 8px 8px 0 var(--ink); }
+    .sticker[href="#tickets"] { grid-column: span 2; }
+    .label {
+      align-self: flex-start;
+      padding: 3px 10px;
+      background: var(--paper);
+      border: 2px solid var(--ink);
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 800;
+    }
+    .num {
+      display: block;
+      font-size: min(46px, 19cqi);
+      font-weight: 800;
+      line-height: 1;
+      letter-spacing: -0.04em;
+      white-space: nowrap;
+      font-variant-numeric: tabular-nums;
+    }
+    .two { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .two .num { font-size: min(46px, 10cqi); }
+    .what { display: block; margin-top: 6px; font-size: 13px; font-weight: 600; }
+    .what b { display: inline-block; margin-top: 3px; padding: 0 6px; background: var(--ink); color: var(--paper); border-radius: 6px; font-weight: 700; white-space: nowrap; }
+    .what b.up::before { content: "↑ "; color: var(--lime); }
+    .what b.down::before { content: "↓ "; color: var(--coral); }
+    .mood { margin-top: auto; font: 400 18px/1.1 var(--marker); transform: rotate(-2deg); transform-origin: left; }
 
-    .sheet { padding: 22px 24px 26px; background: var(--white); border: 3px solid var(--ink); }
-    .sheet-kicker { margin: 0; font: 700 11px var(--sans); letter-spacing: 0.14em; text-transform: uppercase; }
-    .sheet > .sheet-kicker:first-child { display: inline-block; padding: 4px 8px; background: var(--ink); color: var(--white); }
-    .sheet h1 { margin: 12px 0 0; font: 900 64px/0.9 var(--sans); letter-spacing: -0.05em; }
-    .sheet-value { margin: 26px 0 0; font: 900 104px/0.85 var(--sans); letter-spacing: -0.06em; font-variant-numeric: tabular-nums lining-nums; }
-    .sheet-metric { margin: 10px 0 0; font: 600 16px var(--sans); color: var(--muted); }
-    .sheet h2.sheet-kicker { margin: 36px 0 0; }
-    .sheet .pair .sheet-value { font-size: 80px; }
-    table { width: 100%; margin-top: 26px; border-collapse: collapse; border-top: 3px solid var(--ink); }
+    /* detail */
+    .sheet {
+      container-type: inline-size;
+      padding: 22px 24px 26px;
+      background: #fff;
+      border: 2.5px solid var(--ink);
+      border-radius: 22px;
+      box-shadow: 6px 6px 0 var(--ink);
+    }
+    .back { display: inline-block; margin-bottom: 14px; font-size: 14px; font-weight: 700; text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 3px; }
+    .sheet h1 { margin: 0; font-size: clamp(36px, 6vw, 56px); font-weight: 800; line-height: 1; letter-spacing: -0.04em; }
+    .scribble { margin: 10px 0 0; font: 400 26px var(--marker); color: #e0352b; transform: rotate(-2deg); transform-origin: left; }
+    .bigs { display: flex; flex-wrap: wrap; gap: 18px 40px; margin-top: 22px; }
+    .big { padding: 12px 16px; background: var(--c); border: 2.5px solid var(--ink); border-radius: 16px; }
+    .big .num { font-size: min(72px, 15cqi); }
+    .tldr { margin: 22px 0 0; max-width: 56ch; font-size: 16px; font-weight: 600; }
+    .tldr b { padding: 1px 6px; margin-right: 4px; background: var(--yellow); }
+    .sheet h2 { margin: 30px 0 0; font: 400 22px var(--marker); }
+    table { width: 100%; margin-top: 18px; border-collapse: collapse; }
     .sheet h2 + table { margin-top: 8px; }
-    th { text-align: left; font: 700 11px var(--sans); letter-spacing: 0.12em; text-transform: uppercase; padding: 10px 0 8px; border-bottom: 1px solid var(--ink); }
-    td { padding: 12px 16px 12px 0; border-bottom: 1px solid var(--ink); vertical-align: top; font-weight: 500; }
-    td.num, th.num { text-align: right; padding-right: 0; font-weight: 800; font-variant-numeric: tabular-nums; }
+    th { text-align: left; font-size: 12px; font-weight: 800; padding: 0 0 8px; border-bottom: 2.5px solid var(--ink); }
+    td { padding: 11px 16px 11px 0; border-bottom: 2px dashed rgba(17, 17, 17, 0.35); vertical-align: top; font-size: 15px; font-weight: 500; }
+    td.num, th.num { text-align: right; padding-right: 0; font-weight: 800; }
     tr:last-child td { border-bottom: 0; }
 
+    /* group chat */
     .chat-panel {
+      position: sticky;
+      top: 24px;
       display: flex;
       flex-direction: column;
-      min-height: 640px;
+      height: min(660px, calc(100vh - 90px));
       overflow: hidden;
-      background: var(--white);
-      border: 3px solid var(--ink);
+      background: #fff;
+      border: 2.5px solid var(--ink);
+      border-radius: 22px;
+      box-shadow: 6px 6px 0 var(--ink);
     }
-    .chat-head { padding: 12px 14px; background: var(--ink); color: var(--white); font: 900 28px/1 var(--sans); letter-spacing: -0.04em; }
-    .chat-head::after { content: "."; color: var(--lage); }
-    .thread { flex: 1; display: flex; flex-direction: column; gap: 12px; overflow: auto; padding: 16px 14px; }
-    .thread:empty::before { content: "Frag nach Geld, Fällen, Reichweite oder Aufgaben."; font: 700 22px/1.1 var(--sans); letter-spacing: -0.02em; color: #c9c6be; }
-    .msg-user { align-self: flex-end; max-width: 80%; padding: 8px 12px; background: var(--ink); color: var(--white); font-weight: 600; }
-    .msg-agent { align-self: flex-start; max-width: 90%; font: 600 17px/1.3 var(--sans); letter-spacing: -0.01em; }
+    .chat-head { display: flex; flex-direction: column; padding: 12px 16px; background: var(--ink); color: var(--paper); }
+    .chat-head span { font-size: 17px; font-weight: 800; }
+    .chat-head small { font-size: 12px; font-weight: 600; color: rgba(255, 250, 240, 0.6); }
+    .thread { flex: 1; display: flex; flex-direction: column; gap: 10px; overflow: auto; padding: 14px; }
+    .thread:empty::before { content: "ask me anything. cash, fires, clout, side quests."; font: 400 20px/1.2 var(--marker); color: #bdb7aa; transform: rotate(-1.5deg); }
+    .msg-user, .msg-agent { max-width: 82%; padding: 8px 13px; border-radius: 18px; font-size: 14px; font-weight: 500; }
+    .msg-user { align-self: flex-end; background: var(--blue); color: #fff; border-bottom-right-radius: 5px; }
+    .msg-agent { align-self: flex-start; background: #ececee; border-bottom-left-radius: 5px; }
+    .msg-agent::before { content: "lage bot 🤖"; display: block; margin-bottom: 2px; font-size: 11px; font-weight: 800; color: var(--muted); }
 
     .composer {
       display: flex;
       align-items: flex-end;
       gap: 4px;
-      margin-top: auto;
-      padding: 8px 8px 8px 14px;
-      border-top: 3px solid var(--ink);
+      margin: 0 10px 10px;
+      padding: 3px 3px 3px 14px;
+      border: 2.5px solid var(--ink);
+      border-radius: 24px;
     }
-    textarea { flex: 1; border: 0; resize: none; background: transparent; padding: 9px 0; line-height: 22px; max-height: 110px; min-height: 40px; font-weight: 600; }
-    textarea::placeholder { color: #9a978f; }
-    .icon-btn { width: 38px; height: 38px; flex: none; display: grid; place-items: center; border: 0; background: transparent; }
-    .icon-btn:hover { background: #ece9e2; }
-    .icon-btn[aria-pressed="true"] { background: var(--lage); color: var(--white); }
-    #send { background: var(--lage); color: var(--white); }
-    #send:disabled { background: #d8d5ce; color: var(--white); }
-    .icon-btn svg { width: 17px; height: 17px; display: block; }
+    textarea {
+      flex: 1;
+      border: 0;
+      resize: none;
+      background: transparent;
+      padding: 9px 0;
+      line-height: 22px;
+      max-height: 110px;
+      min-height: 40px;
+      font-weight: 600;
+    }
+    textarea::placeholder { color: #9a958a; }
+    .icon-btn {
+      width: 38px; height: 38px; flex: none;
+      display: grid; place-items: center;
+      border: 0; border-radius: 50%;
+      background: transparent;
+    }
+    .icon-btn:hover { background: #f1eee6; }
+    .icon-btn[aria-pressed="true"] { background: var(--coral); }
+    #send { background: var(--lime); border: 2px solid var(--ink); }
+    #send:disabled { background: #e9e6de; border-color: #c9c4b8; color: #9a958a; }
+    .icon-btn svg { width: 16px; height: 16px; display: block; }
     .icon-btn svg path, .icon-btn svg rect { stroke-width: 2; }
 
     .backdrop { display: none; }
 
     @media (max-width: 1100px) {
-      .tile-value { font-size: 48px; }
+      .workspace { grid-template-columns: minmax(0, 1fr) 300px; gap: 26px; }
+      .stage { padding: 24px 22px 40px; }
+      .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .sticker[href="#finance"] { grid-column: span 2; }
     }
     @media (max-width: 860px) {
       .app { grid-template-columns: 1fr; }
       .topbar { display: flex; }
-      .topbar strong { font-weight: 800; }
       .rail {
         position: fixed;
         z-index: 4;
@@ -223,78 +279,67 @@
         transition: transform 160ms ease;
       }
       .rail.open { transform: none; }
-      .backdrop.show { display: block; position: fixed; inset: 0; z-index: 3; background: rgba(0, 0, 0, 0.45); }
-      .stage { padding: 16px; }
-      .workspace { grid-template-columns: 1fr; }
-      .chat-panel { min-height: 480px; }
-      .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .tile[href="#finance"] { grid-column: span 2; }
-      .tile { min-height: 140px; }
-      .tile-value { font-size: 40px; margin-top: 16px; }
-      .sheet h1 { font-size: 44px; }
-      .sheet-value { font-size: 68px; }
-      .sheet .pair .sheet-value { font-size: 48px; }
+      .backdrop.show { display: block; position: fixed; inset: 0; z-index: 3; background: rgba(17, 17, 17, 0.5); }
+      .stage { padding: 20px 16px 32px; }
+      .workspace { grid-template-columns: 1fr; gap: 32px; }
+      .grid { gap: 18px 14px; }
+      .sticker { min-height: 160px; padding: 12px 13px 14px; transform: rotate(calc(var(--tilt, 0deg) / 2)); }
+      .chat-panel { position: static; height: 500px; }
     }
     @media (prefers-reduced-motion: reduce) {
-      .rail, .tile { transition: none; }
+      .ticker-track { animation: none; }
+      .rail, .sticker { transition: none; }
     }
-
-    .tile { container-type: inline-size; }
-    .tile-value { white-space: nowrap; font-size: min(64px, 22cqi); }
-    .pair .tile-value { font-size: min(64px, 11cqi); }
-    .tile-meta > span:first-child { min-width: 0; }
-    .sheet { container-type: inline-size; }
-    .sheet-value { white-space: nowrap; font-size: min(104px, 17cqi); }
-    .sheet .pair .sheet-value { font-size: min(80px, 8.5cqi); }
   </style>
 </head>
 <body>
   <div class="app">
     <aside class="rail" id="rail">
       <div class="brand">
-        <p class="brand-kicker">Lage</p>
+        <p class="brand-kicker">lage <span>(pre-seed energy)</span></p>
         <p class="brand-name" id="company">Heft &amp; Bogen</p>
         <div class="seg" role="tablist" aria-label="Betrieb">
-          <button type="button" role="tab" data-pack="buch" aria-selected="true">Buchladen</button>
-          <button type="button" role="tab" data-pack="software" aria-selected="false">Software</button>
-          <button type="button" role="tab" data-pack="event" aria-selected="false">Event</button>
+          <button type="button" role="tab" data-pack="buch" aria-selected="true">bookshop 📚</button>
+          <button type="button" role="tab" data-pack="software" aria-selected="false">saas 💻</button>
+          <button type="button" role="tab" data-pack="event" aria-selected="false">events 🪩</button>
         </div>
       </div>
       <nav aria-label="Bereiche">
         <div class="group">
-          <a class="nav-btn" href="#home">Übersicht</a>
+          <a class="nav-btn" href="#home">the vibe ✨</a>
         </div>
         <div class="group">
-          <p class="group-label">Lage</p>
-          <a class="nav-btn" href="#finance">Finance</a>
-          <a class="nav-btn" href="#tickets">Tickets &amp; Probleme</a>
+          <p class="group-label">status</p>
+          <a class="nav-btn" href="#finance">cash 💸</a>
+          <a class="nav-btn" href="#tickets">fires 🔥</a>
         </div>
         <div class="group">
-          <p class="group-label">Wachstum</p>
-          <a class="nav-btn" href="#social">Social Media</a>
-          <a class="nav-btn" href="#conversion">Conversion</a>
-          <a class="nav-btn" href="#retention">Retention</a>
+          <p class="group-label">growth</p>
+          <a class="nav-btn" href="#social">clout 📈</a>
+          <a class="nav-btn" href="#conversion">conversion 🛒</a>
+          <a class="nav-btn" href="#retention">they came back 🫶</a>
         </div>
         <div class="group">
-          <p class="group-label">Handeln</p>
-          <a class="nav-btn" href="#messages">Nachrichten</a>
-          <a class="nav-btn" href="#management">Management</a>
-          <a class="nav-btn" href="#todo">To-do</a>
+          <p class="group-label">do stuff</p>
+          <a class="nav-btn" href="#messages">dms 📬</a>
+          <a class="nav-btn" href="#management">team 🫡</a>
+          <a class="nav-btn" href="#todo">side quests 🗡️</a>
         </div>
       </nav>
-      <p class="note">Beispieldaten</p>
+      <p class="note">fake data, real feelings</p>
     </aside>
     <div class="backdrop" id="backdrop"></div>
     <main>
+      <div class="ticker" aria-hidden="true"><div class="ticker-track" id="ticker"></div></div>
       <div class="topbar">
-        <button class="menu-btn" type="button" id="menu">Menü</button>
+        <button class="menu-btn" type="button" id="menu">menu</button>
         <strong id="top-company">Heft &amp; Bogen</strong>
       </div>
       <div class="stage">
         <div class="workspace">
           <div class="frame" id="stage"></div>
           <aside class="chat-panel" aria-label="Chat">
-            <div class="chat-head">Chat</div>
+            <div class="chat-head"><span>founders 🧃</span><small>3 members</small></div>
             <div class="thread" id="thread" aria-live="polite"></div>
             <form class="composer" id="composer">
             <label class="sr" for="msg">Nachricht</label>
@@ -442,6 +487,46 @@
       return heute(d);
     }
 
+    // founder speak: same numbers, different coping mechanism
+    const SLANG = {
+      finance: { name: "cash", emoji: "💸", color: "lime" },
+      tickets: { name: "fires", emoji: "🔥", color: "orange" },
+      social: { name: "clout", emoji: "📈", color: "pink" },
+      conversion: { name: "conversion (pls)", emoji: "🛒", color: "sky" },
+      retention: { name: "they came back", emoji: "🫶", color: "lilac" },
+      messages: { name: "dms", emoji: "📬", color: "yellow" },
+      management: { name: "pinging the team", emoji: "🫡", color: "mint" },
+      todo: { name: "side quests", emoji: "🗡️", color: "coral" }
+    };
+    const FLAT = { tickets: "this is fine 🙂", messages: "left on read", management: "who's on this??", todo: "touch grass later" };
+    const TILTS = [-2, 1.5, -1, 2.5, -2.5, 1, -1.5, 2];
+    const OPENERS = ["ngl", "lowkey", "fr", "ok so", "not gonna lie"];
+    let turn = 0;
+
+    function mood(item) {
+      if (item.sign === "up") return "we're so back";
+      if (item.sign === "down") return "it's so over";
+      return FLAT[item.id] || "vibes tbd";
+    }
+
+    // lets the chat understand founder words before Robin's German keyword matching
+    function slang(text) {
+      return text.toLowerCase()
+        .replace(/cash|money|runway|burn/g, "geld")
+        .replace(/fire/g, "problem")
+        .replace(/clout|followers|reach/g, "reichweite")
+        .replace(/\bdms?\b/g, "nachricht")
+        .replace(/side ?quests?/g, "todo")
+        .replace(/came back|churn/g, "retention")
+        .replace(/\bsales\b|\bconv\w*/g, "conversion");
+    }
+
+    function vibe(answer) {
+      const opener = OPENERS[turn++ % OPENERS.length];
+      const bad = /unter dem|kritisch|über der Frist|ungelesen|überfällig/i.test(answer);
+      return opener + " " + answer.charAt(0).toLowerCase() + answer.slice(1) + (bad ? " 💀" : " 🚀");
+    }
+
     function renderNav() {
       document.querySelectorAll(".nav-btn").forEach((link) => {
         const id = link.getAttribute("href").slice(1);
@@ -453,26 +538,23 @@
       });
       document.getElementById("company").textContent = dash().company;
       document.getElementById("top-company").textContent = dash().company;
-      const place = view === "home" ? "zum Unternehmen" : "zu " + dash().tiles[view].category;
-      msg.placeholder = "Nachricht " + place;
+      msg.placeholder = view === "home" ? "ask the group chat…" : "ask about " + SLANG[view].name + "…";
+      const words = [dash().company, "build in public", "day 287", "default alive?", "ship it", "no meetings wednesday", "ramen profitable (almost)", "we're hiring (we're not)"];
+      const run = words.map((word) => "<span>" + esc(word) + "</span>").join("");
+      document.getElementById("ticker").innerHTML = run + run;
     }
 
-    function metricBlock(item) {
-      const sign = item.sign ? " " + item.sign : "";
-      return '<span><span class="tile-value">' + esc(item.value) + "</span>" +
-        '<span class="tile-meta"><span>' + esc(item.metric) + '</span><span class="' + sign.trim() + '">' + esc(item.delta) + "</span></span></span>";
+    function nums(item) {
+      return '<span class="num">' + esc(item.value) + "</span>" +
+        '<span class="what">' + esc(item.metric) + (item.delta ? ' <b class="' + (item.sign || "") + '">' + esc(item.delta) + "</b>" : "") + "</span>";
     }
 
-    function renderTile(item) {
-      if (item.also) {
-        return '<a class="tile" href="#' + item.id + '">' +
-          '<span class="tile-cat">' + esc(item.category) + "</span>" +
-          '<span class="pair">' + metricBlock(item) + metricBlock(item.also) + "</span></a>";
-      }
-      return '<a class="tile" href="#' + item.id + '">' +
-        '<span class="tile-cat">' + esc(item.category) + "</span>" +
-        metricBlock(item) +
-        "</a>";
+    function renderTile(item, index) {
+      const s = SLANG[item.id];
+      const body = item.also ? '<span class="two"><span>' + nums(item) + "</span><span>" + nums(item.also) + "</span></span>" : nums(item);
+      return '<a class="sticker c-' + s.color + '" href="#' + item.id + '" style="--tilt: ' + TILTS[index % TILTS.length] + 'deg">' +
+        '<span class="label">' + s.emoji + " " + esc(s.name) + "</span>" + body +
+        '<span class="mood">' + esc(mood(item)) + "</span></a>";
     }
 
     function tableHtml(table) {
@@ -482,29 +564,32 @@
     }
 
     function renderSheet(item) {
-      const sign = item.sign ? " " + item.sign : "";
+      const s = SLANG[item.id];
+      const big = (it) => '<div class="big">' + nums(it) + "</div>";
+      let out = '<article class="sheet c-' + s.color + '"><a class="back" href="#home">← back to the vibe</a>' +
+        "<h1>" + s.emoji + " " + esc(s.name) + '</h1><p class="scribble">' + esc(mood(item)) + "</p>" +
+        '<div class="bigs">' + big(item) + (item.also ? big(item.also) : "") + "</div>" +
+        '<p class="tldr"><b>tl;dr</b> ' + esc(item.line) + "</p>";
       if (item.also) {
-        const alsoSign = item.also.sign ? " " + item.also.sign : "";
-        return '<article class="sheet"><p class="sheet-kicker">' + esc(GROUPS[item.id]) + "</p><h1>" + esc(item.category) + "</h1>" +
-          '<div class="pair"><span><p class="sheet-value">' + esc(item.value) + '</p><p class="sheet-metric">' + esc(item.metric) + ' · <span class="' + sign.trim() + '">' + esc(item.delta) + "</span></p></span>" +
-          '<span><p class="sheet-value">' + esc(item.also.value) + '</p><p class="sheet-metric">' + esc(item.also.metric) + ' · <span class="' + alsoSign.trim() + '">' + esc(item.also.delta) + "</span></p></span></div>" +
-          "<h2 class=\"sheet-kicker\">Tickets</h2>" + tableHtml(dash().sheets.tickets) +
-          "<h2 class=\"sheet-kicker\">Probleme</h2>" + tableHtml(dash().sheets.problems) +
-          "</article>";
+        out += "<h2>open tickets</h2>" + tableHtml(dash().sheets.tickets) +
+          "<h2>actually on fire</h2>" + tableHtml(dash().sheets.problems);
+      } else {
+        out += tableHtml(dash().sheets[item.id]);
       }
-      return '<article class="sheet"><p class="sheet-kicker">' + esc(GROUPS[item.id]) + "</p><h1>" + esc(item.category) + "</h1>" +
-        '<p class="sheet-value">' + esc(item.value) + "</p>" +
-        '<p class="sheet-metric">' + esc(item.metric) + ' · <span class="' + sign.trim() + '">' + esc(item.delta) + "</span></p>" +
-        tableHtml(dash().sheets[item.id]) + "</article>";
+      return out + "</article>";
+    }
+
+    function renderHome(d) {
+      const ups = ORDER.filter((id) => d.tiles[id].sign === "up").length;
+      const downs = ORDER.filter((id) => d.tiles[id].sign === "down").length;
+      const status = ups > downs ? "lowkey cooking 🍳" : "it's giving pivot 😬";
+      return '<h1 class="hey">gm, ' + esc(d.company) + ' 👋</h1><p class="sub">status: ' + status + "</p>" +
+        '<div class="grid">' + ORDER.map((id, index) => renderTile(d.tiles[id], index)).join("") + "</div>";
     }
 
     function renderStage() {
       const d = dash();
-      if (view === "home") {
-        stage.innerHTML = '<h1 class="sr">Übersicht</h1><div class="grid">' + ORDER.map((id) => renderTile(d.tiles[id])).join("") + "</div>";
-      } else {
-        stage.innerHTML = renderSheet(d.tiles[view]);
-      }
+      stage.innerHTML = view === "home" ? renderHome(d) : renderSheet(d.tiles[view]);
       renderNav();
     }
 
@@ -530,7 +615,7 @@
       const trimmed = text.trim();
       if (!trimmed) return;
       messages.push({ role: "user", text: trimmed });
-      messages.push({ role: "agent", text: answerFor(trimmed) });
+      messages.push({ role: "agent", text: vibe(answerFor(slang(trimmed))) });
       msg.value = "";
       fit();
       sendBtn.disabled = true;
