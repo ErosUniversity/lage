@@ -45,8 +45,8 @@ VERSIONS = {
         "name": "Founder",
         "fonts": "Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Permanent+Marker",
         "replace": [
-            ('<p class="brand-kicker"><span class="om-mark" aria-hidden="true" style="--om-size: 2em">ॐ</span>Lage</p>',
-             '<p class="brand-kicker"><span class="om-mark" aria-hidden="true" style="--om-size: 0.75em">ॐ</span>lage <span>(pre-seed energy)</span></p>'),
+            ('<p class="brand-kicker"><span class="unc-logo" data-unc="wordmark" style="--unc-h: 22px; color: var(--ink, var(--text))"></span></p>',
+             '<p class="brand-kicker"><span class="unc-logo" data-unc="wordmark" style="--unc-h: 34px"></span><span>(pre-seed energy)</span></p>'),
             ('data-on="Klang an" data-off="Klang aus" aria-pressed="false">Klang aus</button>',
              'data-on="sound on 🔊" data-off="sound off 🔇" aria-pressed="false">sound off 🔇</button>'),
             ('aria-selected="true">Buchladen</button>', 'aria-selected="true">bookshop 📚</button>'),
@@ -84,7 +84,7 @@ for key, v in VERSIONS.items():
         "  <style>\n" + css + "  </style>"
     )
     page = re.sub(r"<style>.*?</style>", lambda _: head, base, count=1, flags=re.S)
-    page = page.replace("<title>Lage</title>", f'<title>Lage · {v["name"]}</title>', 1)
+    page = page.replace("<title>unc</title>", f'<title>unc · {v["name"]}</title>', 1)
     a, b = page.index(JS_START), page.index(JS_END)
     page = page[:a] + js.rstrip("\n") + "\n\n" + page[b:]
     for old, new in v["replace"]:

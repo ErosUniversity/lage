@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Lage · Welcome</title>
+  <title>unc · Welcome</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&display=swap">
@@ -212,7 +212,7 @@
 </head>
 <body>
   <header class="top">
-    <a class="mark" href="../"><span class="om-mark" aria-hidden="true" style="--om-size: 0.62em">ॐ</span>Lage</a>
+    <a class="mark" href="../" aria-label="unc"><span class="unc-logo" data-unc="wordmark" style="--unc-h: 22px" aria-hidden="true"></span></a>
     <span class="crumb">onboarding</span>
     <div class="mode" role="tablist" aria-label="Sheet">
       <button type="button" role="tab" data-mode="preset" aria-selected="true">Preset</button>
@@ -451,7 +451,7 @@
       clearChips();
       lockCompany();
       say("Welcome to " + state.company + ".", true);
-      say("I'm Lage. I'll set up your first week while we talk. What should we call you?");
+      say("I'm unc. I'll set up your first week while we talk. What should we call you?");
       await queue;
       input.placeholder = "Your first name";
       input.focus();
