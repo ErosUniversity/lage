@@ -60,11 +60,21 @@
         '<span class="what">' + esc(item.metric) + (item.delta ? ' <b class="' + (item.sign || "") + '">' + esc(item.delta) + "</b>" : "") + "</span>";
     }
 
-    function renderTile(item, index) {
+    // +50 % 📈, −6,7 % 📉, ±0 % 😴
+    function stamp(change) {
+      if (change === 0) return "±0 % 😴";
+      const abs = Math.abs(change * 100);
+      return (change > 0 ? "+" : "−") + String(abs >= 10 ? Math.round(abs) : abs.toFixed(1)).replace(".", ",") + (change > 0 ? " % 📈" : " % 📉");
+    }
+
+    // index is the rank by change: 0 is the main character, 1 runs wide
+    function renderTile(item, index, change) {
       const s = SLANG[item.id];
+      const size = index === 0 ? " sticker-l" : index === 1 ? " sticker-m" : " sticker-s";
       const body = item.also ? '<span class="two"><span>' + nums(item) + "</span><span>" + nums(item.also) + "</span></span>" : nums(item);
-      return '<a class="sticker c-' + s.color + '" href="#' + item.id + '" style="--tilt: ' + TILTS[index % TILTS.length] + 'deg">' +
-        '<span class="label">' + s.emoji + " " + esc(s.name) + "</span>" + body +
+      return '<a class="sticker c-' + s.color + size + '" href="#' + item.id + '" style="--tilt: ' + TILTS[index % TILTS.length] + 'deg">' +
+        '<span class="stamp">' + stamp(change) + "</span>" +
+        '<span class="label">' + s.emoji + " " + esc(s.name) + (index === 0 ? " · main character ✨" : "") + "</span>" + body +
         '<span class="mood">' + esc(mood(item)) + "</span></a>";
     }
 
@@ -95,7 +105,8 @@
       const downs = ORDER.filter((id) => d.tiles[id].sign === "down").length;
       const status = ups > downs ? "lowkey cooking 🍳" : "it's giving pivot 😬";
       return '<h1 class="hey">gm, ' + esc(d.company) + ' 👋</h1><p class="sub">status: ' + status + "</p>" +
-        '<div class="grid">' + ORDER.map((id, index) => renderTile(d.tiles[id], index)).join("") + "</div>";
+        '<div class="grid">' + ORDER.slice().sort((a, b) => Math.abs(d.change[b]) - Math.abs(d.change[a]))
+          .map((id, index) => renderTile(d.tiles[id], index, d.change[id])).join("") + "</div>";
     }
 
     function renderStage() {

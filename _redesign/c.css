@@ -125,7 +125,7 @@
     }
 
     /* stickers */
-    .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px 22px; }
+    .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); grid-auto-flow: dense; gap: 24px 22px; }
     .sticker {
       container-type: inline-size;
       display: flex;
@@ -141,7 +141,39 @@
       transition: transform 140ms ease, box-shadow 140ms ease;
     }
     .sticker:hover { transform: rotate(0deg) translate(-2px, -2px); box-shadow: 8px 8px 0 var(--ink); }
-    .sticker[href="#tickets"] { grid-column: span 2; }
+    .sticker { position: relative; }
+    .sticker-l { grid-column: span 2; grid-row: span 2; }
+    .sticker-l .num { font-size: min(120px, 24cqi); }
+    .sticker-l .two .num { font-size: min(104px, 22cqi); }
+    .sticker-l .what { font-size: 16px; }
+    .sticker-l .mood { font-size: 28px; }
+    .sticker-m { grid-column: span 2; }
+    .two .what b { white-space: normal; }
+    .sticker-s .two { grid-template-columns: 1fr; gap: 10px; }
+    .sticker-s .two .num { font-size: min(46px, 19cqi); }
+    .stamp {
+      position: absolute;
+      top: -13px;
+      right: 14px;
+      padding: 2px 9px;
+      background: var(--ink);
+      color: var(--paper);
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 800;
+      white-space: nowrap;
+      font-variant-numeric: tabular-nums;
+      transform: rotate(4deg);
+    }
+    .sticker-l .stamp {
+      top: -18px;
+      padding: 4px 13px;
+      background: var(--lime);
+      color: var(--ink);
+      border: 2.5px solid var(--ink);
+      font-size: 19px;
+      transform: rotate(-5deg);
+    }
     .label {
       align-self: flex-start;
       padding: 3px 10px;
@@ -256,7 +288,8 @@
       .workspace { grid-template-columns: minmax(0, 1fr) 300px; gap: 26px; }
       .stage { padding: 24px 22px 40px; }
       .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .sticker[href="#finance"] { grid-column: span 2; }
+      .sticker-l, .sticker-m { grid-column: span 2; }
+      .sticker-l { grid-row: auto; min-height: 260px; }
     }
     @media (max-width: 860px) {
       .app { grid-template-columns: 1fr; }

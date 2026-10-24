@@ -175,6 +175,21 @@
     .row-value { font-size: 16px; font-weight: 600; white-space: nowrap; }
     .row .delta { padding: 0; background: none; font-size: 13px; }
     .row .delta.flat { background: none; }
+    .row-l { padding-top: 18px; padding-bottom: 18px; grid-template-columns: 56px minmax(0, 1fr) auto; }
+    .row-l .row-icon { width: 56px; height: 56px; font-size: 22px; }
+    .row-l .row-name { font-size: 19px; }
+    .row-l .row-value { font-size: 28px; font-weight: 700; letter-spacing: -0.03em; }
+    .row-s { padding-top: 8px; padding-bottom: 8px; grid-template-columns: 32px minmax(0, 1fr) auto; }
+    .row-s .row-icon { width: 32px; height: 32px; font-size: 12px; }
+    .row-s .row-name { font-size: 14px; }
+    .row-s .row-sub { font-size: 12px; }
+    .row-s .row-value { font-size: 14px; }
+    .move { display: flex; align-items: center; gap: 8px; margin-top: 7px; max-width: 220px; }
+    .move-track { flex: 1; height: 4px; border-radius: 4px; background: var(--chip); overflow: hidden; }
+    .move-bar { display: block; height: 100%; border-radius: 4px; background: var(--text); }
+    .move-pct { font-size: 12px; font-weight: 600; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+    .row-s .move { margin-top: 5px; }
+    .row-s .move-track { height: 3px; }
 
     /* detail */
     .back { display: inline-block; margin-bottom: 22px; font-size: 14px; font-weight: 500; color: var(--muted); }

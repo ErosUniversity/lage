@@ -154,10 +154,11 @@
     }
     .frame { min-width: 0; padding-right: 28px; border-right: 1px solid var(--ink); }
 
-    /* front page: finance is the lead story */
+    /* front page: the biggest mover is the lead story, the second biggest runs wide */
     .grid {
       display: grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
+      grid-auto-flow: dense;
       gap: 1px;
       background: var(--hair);
       border-top: 1px solid var(--ink);
@@ -173,15 +174,16 @@
       transition: background 120ms;
     }
     .tile:hover { background: var(--hover); }
-    .tile[href="#finance"] { grid-column: span 2; grid-row: span 2; }
-    .tile[href="#tickets"] { grid-column: span 2; }
+    .tile-lead { grid-column: span 2; grid-row: span 2; }
+    .tile-second { grid-column: span 2; }
     .tile-cat {
       font-size: 11px;
       letter-spacing: 0.12em;
       text-transform: uppercase;
       font-weight: 500;
     }
-    .tile-group { display: block; margin-bottom: 3px; color: var(--faint); }
+    .tile-group { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0 8px; margin-bottom: 3px; color: var(--faint); }
+    .tile-move { color: var(--muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
     .tile-value {
       display: block;
       margin-top: 22px;
@@ -189,7 +191,7 @@
       letter-spacing: -0.02em;
       font-variant-numeric: lining-nums tabular-nums;
     }
-    .tile[href="#finance"] .tile-value { font-size: 104px; letter-spacing: -0.04em; }
+    .tile-lead .tile-value { font-size: 104px; letter-spacing: -0.04em; }
     .tile-meta {
       display: flex;
       flex-direction: column;
@@ -197,8 +199,10 @@
       font: italic 400 15px/1.3 var(--serif);
       color: var(--muted);
     }
-    .tile[href="#finance"] .tile-meta { flex-direction: row; justify-content: space-between; gap: 12px; font-size: 19px; }
+    .tile-lead .tile-meta { flex-direction: row; justify-content: space-between; gap: 12px; font-size: 19px; }
+    .tile-lead .pair .tile-meta { flex-direction: column; gap: 0; font-size: 17px; }
     .tile-meta > span:last-child { white-space: nowrap; }
+    .pair .tile-meta > span:last-child { white-space: normal; }
     .tile-dek {
       display: block;
       max-width: 30ch;
@@ -210,6 +214,8 @@
     .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 18px; }
     .pair > span + span { border-left: 1px solid var(--hair); padding-left: 20px; }
     .pair .tile-value { margin-top: 0; }
+    .tile-small .pair { grid-template-columns: 1fr; gap: 12px; margin-top: 14px; }
+    .tile-small .pair > span + span { border-left: 0; padding-left: 0; }
         .up { color: var(--good); }
     .down { color: var(--bad); }
 
@@ -377,10 +383,10 @@
       .sheet { border-top: 0; padding-top: 0; }
       .tile-dek { font-size: 19px; padding-top: 14px; }
       .sheet-dek { font-size: 19px; }
-      .tile[href="#finance"] { grid-row: auto; }
+      .tile-lead { grid-row: auto; }
       .tile { min-height: 140px; }
       .tile-value { font-size: 34px; margin-top: 16px; }
-      .tile[href="#finance"] .tile-value { font-size: 64px; }
+      .tile-lead .tile-value { font-size: 64px; }
       .sheet h1 { font-size: 38px; }
       .sheet-value { font-size: 64px; }
       .sheet .pair .sheet-value { font-size: 48px; }
@@ -391,9 +397,11 @@
 
     /* numbers shrink with their tile instead of breaking */
     .tile { container-type: inline-size; }
-    .tile-value { white-space: nowrap; font-size: min(46px, 17cqi); }
-    .tile[href="#finance"] .tile-value { font-size: min(104px, 21cqi); }
-    .pair .tile-value { font-size: min(46px, 9cqi); }
+    /* number size follows the change: --weight is this change relative to the biggest one (0 to 1) */
+    .tile { --size: calc(30px + 90px * var(--weight, 0)); }
+    .tile-value, .tile-lead .tile-value { white-space: nowrap; font-size: min(var(--size), calc(160cqi / var(--chars, 6))); }
+    .pair .tile-value { font-size: min(var(--size), calc(70cqi / var(--chars, 3))); }
+    .tile-small .pair .tile-value { font-size: min(var(--size), calc(160cqi / var(--chars, 3))); }
     .sheet { container-type: inline-size; }
     .sheet-value { white-space: nowrap; font-size: min(96px, 17cqi); }
     .sheet .pair .sheet-value { font-size: min(72px, 8.5cqi); }
@@ -483,9 +491,12 @@
       return { headers, rows, numeric };
     }
 
+    // change: relative Veränderung je Bereich, bestimmt die Aufmachung. Aus den Kacheln abgeleitet;
+    // für Nachrichten, Management und To-do sind die Vorwerte ausgedacht.
     const DATA = {
       buch: {
         company: "Heft & Bogen",
+        change: { finance: 0.052, tickets: 0.5, social: 0.12, conversion: -0.067, retention: 0.033, messages: 0.4, management: 0.25, todo: 0 },
         tiles: {
           finance: tile("finance", "Finance", "42.800 €", "Liquide Mittel", "+2.100 €", "up", "42.800 € liquide Mittel, 2.100 € über dem Vormonat."),
           tickets: tile("tickets", "Tickets & Probleme", "6", "Überfällige Fälle", "2 seit gestern", "", "6 Fälle sind über der Frist. 2 Probleme sind kritisch. Eines ist der fehlende Nachtzug.", { value: "2", metric: "Kritisch und offen", delta: "1 in der Lieferkette", sign: "" }),
@@ -510,6 +521,7 @@
       },
       software: {
         company: "Nordkap",
+        change: { finance: -0.055, tickets: 0.571, social: 0.06, conversion: 0.063, retention: -0.011, messages: -0.25, management: 0.4, todo: -0.333 },
         tiles: {
           finance: tile("finance", "Finance", "310.000 €", "Liquide Mittel", "−18.000 €", "down", "310.000 € liquide Mittel, 18.000 € unter dem Vormonat."),
           tickets: tile("tickets", "Tickets & Probleme", "11", "Überfällige Fälle", "4 seit gestern", "", "11 Supportfälle sind über der Antwortfrist. 1 Problem ist kritisch: die API antwortet seit 40 Minuten mit Fehlern.", { value: "1", metric: "Kritisch und offen", delta: "API seit 40 Minuten", sign: "down" }),
@@ -534,6 +546,7 @@
       },
       event: {
         company: "Atelier Süd",
+        change: { finance: 0.095, tickets: 0.333, social: -0.04, conversion: 0.083, retention: 0.067, messages: 0.467, management: 0, todo: 1 },
         tiles: {
           finance: tile("finance", "Finance", "96.500 €", "Liquide Mittel", "+8.400 €", "up", "96.500 € liquide Mittel, 8.400 € über dem Vormonat."),
           tickets: tile("tickets", "Tickets & Probleme", "4", "Überfällige Fälle", "1 seit gestern", "", "4 Rückfragen sind über der Frist. 3 Probleme sind kritisch. Location und Licht betreffen diese Woche.", { value: "3", metric: "Kritisch und offen", delta: "2 betreffen diese Woche", sign: "" }),
@@ -616,20 +629,27 @@
 
     function metricBlock(item) {
       const sign = item.sign ? " " + item.sign : "";
-      return '<span><span class="tile-value">' + esc(item.value) + "</span>" +
+      return '<span><span class="tile-value" style="--chars: ' + item.value.length + '">' + esc(item.value) + "</span>" +
         '<span class="tile-meta"><span>' + esc(item.metric) + '</span><span class="' + sign.trim() + '">' + esc(item.delta) + "</span></span></span>";
     }
 
-    function renderTile(item) {
+    // ▲ 50 %, ▼ 6,7 %, ±0 %
+    function move(change) {
+      if (change === 0) return "±0 %";
+      const abs = Math.abs(change * 100);
+      return (change > 0 ? "▲ " : "▼ ") + String(abs >= 10 ? Math.round(abs) : abs.toFixed(1)).replace(".", ",") + " %";
+    }
+    function renderTile(item, rank, change, max) {
+      const cls = rank === 0 ? "tile tile-lead" : rank === 1 ? "tile tile-second" : "tile tile-small";
+      const weight = max ? (Math.abs(change) / max).toFixed(3) : 0;
+      const cat = '<span class="tile-cat"><span class="tile-group"><span>' + esc(GROUPS[item.id]) + '</span><span class="tile-move">' + move(change) + "</span></span>" + esc(item.category) + "</span>";
+      const dek = rank === 0 ? '<span class="tile-dek">' + esc(item.line) + "</span>" : "";
       if (item.also) {
-        return '<a class="tile" href="#' + item.id + '">' +
-          '<span class="tile-cat"><span class="tile-group">' + esc(GROUPS[item.id]) + "</span>" + esc(item.category) + "</span>" +
-          '<span class="pair">' + metricBlock(item) + metricBlock(item.also) + "</span></a>";
+        return '<a class="' + cls + '" href="#' + item.id + '" style="--weight: ' + weight + '">' + cat +
+          '<span class="pair">' + metricBlock(item) + metricBlock(item.also) + "</span>" + dek + "</a>";
       }
-      return '<a class="tile" href="#' + item.id + '">' +
-        '<span class="tile-cat"><span class="tile-group">' + esc(GROUPS[item.id]) + "</span>" + esc(item.category) + "</span>" +
-        metricBlock(item) +
-        (item.id === "finance" ? '<span class="tile-dek">' + esc(item.line) + "</span>" : "") +
+      return '<a class="' + cls + '" href="#' + item.id + '" style="--weight: ' + weight + '">' + cat +
+        metricBlock(item) + dek +
         "</a>";
     }
 
@@ -661,7 +681,9 @@
     function renderStage() {
       const d = dash();
       if (view === "home") {
-        stage.innerHTML = '<h1 class="sr">Übersicht</h1><div class="grid">' + ORDER.map((id) => renderTile(d.tiles[id])).join("") + "</div>";
+        const ranked = ORDER.slice().sort((a, b) => Math.abs(d.change[b]) - Math.abs(d.change[a]));
+        stage.innerHTML = '<h1 class="sr">Übersicht</h1><div class="grid">' +
+          ranked.map((id, rank) => renderTile(d.tiles[id], rank, d.change[id], Math.abs(d.change[ranked[0]]))).join("") + "</div>";
       } else {
         stage.innerHTML = renderSheet(d.tiles[view]);
       }
