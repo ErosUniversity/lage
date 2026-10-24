@@ -4,12 +4,12 @@
       --surface: #0f0f10;
       --chip: #1b1b1d;
       --text: #fff;
-      --muted: #8d8d93;
-      --line: #1f1f23;
-      --good: #34c759;
-      --good-bg: rgba(52, 199, 89, 0.14);
-      --bad: #ff453a;
-      --bad-bg: rgba(255, 69, 58, 0.14);
+      --muted: #8d8d8d;
+      --line: #1f1f1f;
+      --good: #81d8d0;
+      --good-bg: rgba(129, 216, 208, 0.14);
+      --bad: #8b8b8b;
+      --bad-bg: rgba(139, 139, 139, 0.14);
       --sans: "Inter", system-ui, -apple-system, sans-serif;
       color-scheme: dark;
     }
@@ -18,12 +18,12 @@
       --surface: #f5f5f7;
       --chip: #efeff2;
       --text: #000;
-      --muted: #6e6e73;
-      --line: #e6e6ea;
-      --good: #12a150;
-      --good-bg: rgba(18, 161, 80, 0.1);
-      --bad: #de3a2f;
-      --bad-bg: rgba(222, 58, 47, 0.1);
+      --muted: #6e6e6e;
+      --line: #e6e6e6;
+      --good: #0f766e;
+      --good-bg: rgba(15, 118, 110, 0.1);
+      --bad: #787878;
+      --bad-bg: rgba(120, 120, 120, 0.1);
       color-scheme: light;
     }
 
