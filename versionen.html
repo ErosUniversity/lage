@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lage · Versionen</title>
+  <style>
+    :root { --bg: #f4f2ee; --ink: #161514; --muted: #6b675f; --line: #d8d3c9; }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; height: 100%; }
+    body { display: flex; flex-direction: column; background: var(--bg); color: var(--ink); font: 14px/1.4 system-ui, -apple-system, sans-serif; }
+    header { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 18px; padding: 10px 16px; border-bottom: 1px solid var(--line); }
+    header strong { font-size: 15px; }
+    .tabs { display: flex; gap: 4px; }
+    .tabs button { border: 1px solid var(--line); background: #fff; border-radius: 999px; padding: 5px 12px; font: inherit; cursor: pointer; }
+    .tabs button[aria-selected="true"] { background: var(--ink); color: #fff; border-color: var(--ink); }
+    header a { margin-left: auto; color: var(--muted); }
+    iframe { flex: 1; width: 100%; border: 0; }
+  </style>
+</head>
+<body>
+  <header>
+    <strong>Lage, drei Versionen</strong>
+    <div class="tabs" role="tablist">
+      <button role="tab" data-v="index.html">Original</button>
+      <button role="tab" data-v="a/">A · Zeitung</button>
+      <button role="tab" data-v="b/">B · Leitstand</button>
+      <button role="tab" data-v="c/">C · Plakat</button>
+    </div>
+    <a id="open" href="a/" target="_blank">einzeln öffnen</a>
+  </header>
+  <iframe id="frame" title="Version"></iframe>
+  <script>
+    const frame = document.getElementById("frame");
+    const open = document.getElementById("open");
+    function show(v) {
+      frame.src = v;
+      open.href = v;
+      document.querySelectorAll("[data-v]").forEach((b) => b.setAttribute("aria-selected", String(b.dataset.v === v)));
+      try { localStorage.setItem("lage-version", v); } catch (e) {}
+    }
+    document.querySelector(".tabs").addEventListener("click", (e) => { const b = e.target.closest("[data-v]"); if (b) show(b.dataset.v); });
+    let start = "a/";
+    try { start = localStorage.getItem("lage-version") || start; } catch (e) {}
+    show(start);
+  </script>
+</body>
+</html>

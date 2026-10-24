@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lage · Leitstand</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap">
+  <style>
+    /* B · Leitstand: dark control room, mono numbers, status lights per group */
+    :root {
+      --bg: #0c0e0f;
+      --panel: #131618;
+      --panel-hi: #181c1f;
+      --ink: #d9ded8;
+      --muted: #8b938d;
+      --faint: #5c645f;
+      --line: #23292c;
+      --line-strong: #343c40;
+      --amber: #ffb224;
+      --good: #4ade80;
+      --bad: #ff6b5b;
+      --lage: #ffb224;
+      --wachstum: #4ade80;
+      --handeln: #7cc4ff;
+      --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+      --sans: "Inter", system-ui, -apple-system, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; min-height: 100%; }
+    body {
+      font-family: var(--sans);
+      color: var(--ink);
+      background: var(--bg);
+      background-image: radial-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+      background-size: 16px 16px;
+      font-size: 14px;
+      line-height: 1.45;
+    }
+    button, textarea { font: inherit; color: inherit; }
+    button, a.nav-btn, a.tile { cursor: pointer; }
+    a.nav-btn, a.tile { text-decoration: none; color: inherit; }
+    :focus { outline: none; }
+    :focus-visible { outline: 1px solid var(--amber); outline-offset: 2px; }
+    .sr {
+      position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+      overflow: hidden; clip: rect(0, 0, 0, 0); border: 0;
+    }
+
+    .app { display: grid; grid-template-columns: 220px minmax(0, 1fr); min-height: 100%; }
+
+    .rail {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+      padding: 18px 12px 16px;
+      background: var(--panel);
+      border-right: 1px solid var(--line);
+    }
+    .brand { padding: 0 6px; }
+    .brand-kicker {
+      margin: 0;
+      font: 500 11px var(--mono);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--amber);
+    }
+    .brand-kicker::before {
+      content: "";
+      display: inline-block;
+      width: 7px; height: 7px;
+      margin-right: 8px;
+      border-radius: 50%;
+      background: var(--good);
+      box-shadow: 0 0 8px var(--good);
+      vertical-align: 1px;
+      animation: pulse 2.4s ease-in-out infinite;
+    }
+    @keyframes pulse { 50% { opacity: 0.35; } }
+    .brand-name { margin: 8px 0 0; font: 600 17px var(--sans); letter-spacing: -0.01em; }
+    .seg {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      margin-top: 14px;
+      background: var(--line);
+      border: 1px solid var(--line);
+    }
+    .seg button {
+      border: 0;
+      background: var(--panel);
+      padding: 6px 2px;
+      font: 500 10px var(--mono);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .seg button:hover { color: var(--ink); }
+    .seg button[aria-selected="true"] { background: var(--amber); color: #111; }
+
+    nav { display: flex; flex-direction: column; gap: 16px; }
+    .group { display: flex; flex-direction: column; gap: 1px; }
+    .group-label {
+      margin: 0 6px 6px;
+      font: 500 10px var(--mono);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--faint);
+    }
+    .group:nth-child(2) .group-label::before { content: "01 "; color: var(--lage); }
+    .group:nth-child(3) .group-label::before { content: "02 "; color: var(--wachstum); }
+    .group:nth-child(4) .group-label::before { content: "03 "; color: var(--handeln); }
+    .nav-btn {
+      display: flex;
+      align-items: center;
+      padding: 6px 8px;
+      font-size: 13px;
+      color: var(--muted);
+      border-left: 2px solid transparent;
+    }
+    .nav-btn:hover { color: var(--ink); background: var(--panel-hi); }
+    .nav-btn[aria-current="page"] { color: var(--ink); background: var(--panel-hi); border-left-color: var(--amber); }
+    .note {
+      margin-top: auto;
+      padding: 0 6px;
+      font: 400 10px var(--mono);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--faint);
+    }
+    .note::before { content: "◇ "; color: var(--amber); }
+
+    main { min-width: 0; min-height: 100vh; display: flex; flex-direction: column; }
+    .topbar {
+      display: none;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      background: var(--panel);
+      border-bottom: 1px solid var(--line);
+    }
+    .menu-btn {
+      border: 1px solid var(--line-strong);
+      background: none;
+      padding: 5px 10px;
+      font: 500 11px var(--mono);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .stage { padding: 22px 22px 28px; }
+    .workspace {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 340px;
+      gap: 14px;
+      align-items: stretch;
+      max-width: 1320px;
+      margin: 0 auto;
+    }
+    .frame { min-width: 0; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .tile {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 150px;
+      padding: 12px 14px 12px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      --led: var(--lage);
+    }
+    .tile:hover { border-color: var(--line-strong); background: var(--panel-hi); }
+    .tile[href="#tickets"] { grid-column: span 2; }
+    .tile[href="#social"], .tile[href="#conversion"], .tile[href="#retention"] { --led: var(--wachstum); }
+    .tile[href="#messages"], .tile[href="#management"], .tile[href="#todo"] { --led: var(--handeln); }
+    .tile::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0;
+      width: 28px; height: 2px;
+      background: var(--led);
+    }
+    .tile-cat {
+      font: 500 10px var(--mono);
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .tile-cat::after {
+      content: "";
+      float: right;
+      width: 6px; height: 6px;
+      margin-top: 3px;
+      border-radius: 50%;
+      background: var(--led);
+      box-shadow: 0 0 6px var(--led);
+    }
+    .tile-value {
+      display: block;
+      margin-top: 22px;
+      font: 500 30px/1 var(--mono);
+      letter-spacing: -0.04em;
+      font-variant-numeric: tabular-nums;
+      color: #f2f5f1;
+    }
+    .tile-meta {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px dashed var(--line-strong);
+      font: 400 11px var(--mono);
+      color: var(--muted);
+    }
+    .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 18px; }
+    .pair .tile-value { margin-top: 0; }
+    .pair .tile-meta { flex-direction: column; gap: 2px; }
+    .up, .down { font-weight: 500; }
+    .up { color: var(--good); }
+    .down { color: var(--bad); }
+    .up::before { content: "▲ "; font-size: 0.8em; }
+    .down::before { content: "▼ "; font-size: 0.8em; }
+
+    .sheet {
+      padding: 18px 20px 22px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-top: 2px solid var(--amber);
+    }
+    .sheet-kicker {
+      margin: 0;
+      font: 500 10px var(--mono);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--amber);
+    }
+    .sheet h1 { margin: 6px 0 0; font: 600 24px var(--sans); letter-spacing: -0.02em; }
+    .sheet-value {
+      margin: 24px 0 0;
+      font: 500 52px/1 var(--mono);
+      letter-spacing: -0.05em;
+      font-variant-numeric: tabular-nums;
+      color: #f2f5f1;
+    }
+    .sheet-metric { margin: 8px 0 0; font: 400 12px var(--mono); color: var(--muted); }
+    .sheet h2.sheet-kicker { margin: 30px 0 0; }
+    .sheet .pair .sheet-value { font-size: 40px; }
+    table { width: 100%; margin-top: 24px; border-collapse: collapse; font-size: 13px; }
+    .sheet h2 + table { margin-top: 10px; }
+    th {
+      text-align: left;
+      font: 500 10px var(--mono);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--faint);
+      padding: 0 0 8px;
+      border-bottom: 1px solid var(--line-strong);
+    }
+    td { padding: 10px 14px 10px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+    tbody tr:hover td { background: var(--panel-hi); }
+    td.num, th.num { text-align: right; padding-right: 0; font-family: var(--mono); font-variant-numeric: tabular-nums; }
+    tr:last-child td { border-bottom: 0; }
+
+    .chat-panel {
+      display: flex;
+      flex-direction: column;
+      min-height: 640px;
+      overflow: hidden;
+      background: #08090a;
+      border: 1px solid var(--line);
+    }
+    .chat-head {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      background: var(--panel);
+      border-bottom: 1px solid var(--line);
+      font: 500 10px var(--mono);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .chat-head::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--good); box-shadow: 0 0 6px var(--good); }
+    .chat-head::after { content: "verbunden"; margin-left: auto; color: var(--good); letter-spacing: 0.1em; }
+    .thread {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      overflow: auto;
+      padding: 14px;
+      font: 400 13px/1.55 var(--mono);
+    }
+    .thread:empty::before { content: "> warte auf Eingabe_"; color: var(--faint); }
+    .msg-user { color: var(--amber); }
+    .msg-user::before { content: "> "; }
+    .msg-agent { color: var(--ink); padding-left: 14px; border-left: 1px solid var(--line-strong); }
+
+    .composer {
+      display: flex;
+      align-items: flex-end;
+      gap: 4px;
+      margin-top: auto;
+      padding: 8px 8px 8px 14px;
+      background: var(--panel);
+      border-top: 1px solid var(--line);
+    }
+    textarea {
+      flex: 1;
+      border: 0;
+      resize: none;
+      background: transparent;
+      padding: 9px 0;
+      font: 400 13px/22px var(--mono);
+      max-height: 110px;
+      min-height: 40px;
+      caret-color: var(--amber);
+    }
+    textarea::placeholder { color: var(--faint); }
+    .icon-btn {
+      width: 34px; height: 34px; flex: none;
+      display: grid; place-items: center;
+      border: 1px solid var(--line-strong);
+      background: transparent;
+    }
+    .icon-btn:hover { border-color: var(--muted); }
+    .icon-btn[aria-pressed="true"] { background: var(--bad); border-color: var(--bad); color: #111; }
+    #send { background: var(--amber); border-color: var(--amber); color: #111; }
+    #send:disabled { opacity: 0.25; }
+    .icon-btn svg { width: 15px; height: 15px; display: block; }
+
+    .backdrop { display: none; }
+
+    @media (max-width: 1100px) {
+      .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 860px) {
+      .app { grid-template-columns: 1fr; }
+      .topbar { display: flex; }
+      .rail {
+        position: fixed;
+        z-index: 4;
+        width: min(300px, 88vw);
+        transform: translateX(-105%);
+        transition: transform 160ms ease;
+      }
+      .rail.open { transform: none; }
+      .backdrop.show { display: block; position: fixed; inset: 0; z-index: 3; background: rgba(0, 0, 0, 0.6); }
+      .stage { padding: 14px 16px 24px; }
+      .workspace { grid-template-columns: 1fr; }
+      .chat-panel { min-height: 480px; margin-top: 4px; }
+      .tile { min-height: 124px; }
+      .tile-value { font-size: 24px; margin-top: 16px; }
+      .sheet-value { font-size: 40px; }
+      .sheet .pair .sheet-value { font-size: 30px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .rail { transition: none; }
+      .brand-kicker::before { animation: none; }
+    }
+
+    .tile { container-type: inline-size; }
+    .tile-value { white-space: nowrap; font-size: min(30px, 16cqi); }
+    .pair .tile-value { font-size: min(30px, 8cqi); }
+    .sheet { container-type: inline-size; }
+    .sheet-value { white-space: nowrap; font-size: min(52px, 17cqi); }
+    .sheet .pair .sheet-value { font-size: min(40px, 8.5cqi); }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="rail" id="rail">
+      <div class="brand">
+        <p class="brand-kicker">Lage</p>
+        <p class="brand-name" id="company">Heft &amp; Bogen</p>
+        <div class="seg" role="tablist" aria-label="Betrieb">
+          <button type="button" role="tab" data-pack="buch" aria-selected="true">Buchladen</button>
+          <button type="button" role="tab" data-pack="software" aria-selected="false">Software</button>
+          <button type="button" role="tab" data-pack="event" aria-selected="false">Event</button>
+        </div>
+      </div>
+      <nav aria-label="Bereiche">
+        <div class="group">
+          <a class="nav-btn" href="#home">Übersicht</a>
+        </div>
+        <div class="group">
+          <p class="group-label">Lage</p>
+          <a class="nav-btn" href="#finance">Finance</a>
+          <a class="nav-btn" href="#tickets">Tickets &amp; Probleme</a>
+        </div>
+        <div class="group">
+          <p class="group-label">Wachstum</p>
+          <a class="nav-btn" href="#social">Social Media</a>
+          <a class="nav-btn" href="#conversion">Conversion</a>
+          <a class="nav-btn" href="#retention">Retention</a>
+        </div>
+        <div class="group">
+          <p class="group-label">Handeln</p>
+          <a class="nav-btn" href="#messages">Nachrichten</a>
+          <a class="nav-btn" href="#management">Management</a>
+          <a class="nav-btn" href="#todo">To-do</a>
+        </div>
+      </nav>
+      <p class="note">Beispieldaten</p>
+    </aside>
+    <div class="backdrop" id="backdrop"></div>
+    <main>
+      <div class="topbar">
+        <button class="menu-btn" type="button" id="menu">Menü</button>
+        <strong id="top-company">Heft &amp; Bogen</strong>
+      </div>
+      <div class="stage">
+        <div class="workspace">
+          <div class="frame" id="stage"></div>
+          <aside class="chat-panel" aria-label="Chat">
+            <div class="chat-head">Chat</div>
+            <div class="thread" id="thread" aria-live="polite"></div>
+            <form class="composer" id="composer">
+            <label class="sr" for="msg">Nachricht</label>
+            <textarea id="msg" rows="1" placeholder="Nachricht schreiben"></textarea>
+            <button class="icon-btn" type="button" id="mic" aria-label="Mikrofon" aria-pressed="false">
+              <svg viewBox="0 0 16 16" aria-hidden="true">
+                <rect x="6" y="1.5" width="4" height="8" rx="2" fill="none" stroke="currentColor" stroke-width="1.4"/>
+                <path d="M4 8.2a4 4 0 0 0 8 0M8 12.2v2" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+              </svg>
+            </button>
+            <button class="icon-btn" type="submit" id="send" aria-label="Senden" disabled>
+              <svg viewBox="0 0 16 16" aria-hidden="true">
+                <path d="M8 13V3.5M8 3.5 4.2 7.2M8 3.5l3.8 3.7" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+          </form>
+          </aside>
+        </div>
+      </div>
+    </main>
+  </div>
+  <script>
+    const ORDER = ["finance", "tickets", "social", "conversion", "retention", "messages", "management", "todo"];
+    const GROUPS = { finance: "Lage", tickets: "Lage", social: "Wachstum", conversion: "Wachstum", retention: "Wachstum", messages: "Handeln", management: "Handeln", todo: "Handeln" };
+
+    function tile(id, category, value, metric, delta, sign, line, also) {
+      return { id, category, value, metric, delta, sign, line, also: also || null };
+    }
+    function sheet(headers, rows, numeric) {
+      return { headers, rows, numeric };
+    }
+
+    const DATA = {
+      buch: {
+        company: "Heft & Bogen",
+        tiles: {
+          finance: tile("finance", "Finance", "42.800 €", "Liquide Mittel", "+2.100 €", "up", "42.800 € liquide Mittel, 2.100 € über dem Vormonat."),
+          tickets: tile("tickets", "Tickets & Probleme", "6", "Überfällige Fälle", "2 seit gestern", "", "6 Fälle sind über der Frist. 2 Probleme sind kritisch. Eines ist der fehlende Nachtzug.", { value: "2", metric: "Kritisch und offen", delta: "1 in der Lieferkette", sign: "" }),
+          social: tile("social", "Social Media", "18.400", "Reichweite, 7 Tage", "+12 %", "up", "Reichweite der letzten 7 Tage: 18.400, davon 12.100 auf Instagram."),
+          conversion: tile("conversion", "Conversion", "4,2 %", "Käufe je Besuch", "−0,3 Punkte", "down", "4,2 % der Besuche wurden ein Kauf. 52 Käufe aus 1.240 Besuchen."),
+          retention: tile("retention", "Retention", "31 %", "Zweitkauf in 90 Tagen", "+1 Punkt", "up", "31 % der Käufer haben in 90 Tagen ein zweites Mal gekauft."),
+          messages: tile("messages", "Nachrichten", "14", "Ungelesen", "3 Konten", "", "14 Nachrichten sind ungelesen."),
+          management: tile("management", "Management", "5", "Überfällige Aufgaben", "älteste 4 Tage", "", "5 delegierte Aufgaben sind über der Frist."),
+          todo: tile("todo", "To-do", "3", "Wichtig und dringend", "von 11 Punkten", "", "3 eigene Punkte sind wichtig und dringend.")
+        },
+        sheets: {
+          finance: sheet(["Konto", "Stand"], [["Geschäftskonto", "38.200 €"], ["Kasse", "4.600 €"], ["Lieferanten, fällig in 14 Tagen", "6.400 €"]], [1]),
+          tickets: sheet(["Fall", "Frist", "Kanal"], [["Abholung Nachtzug", "2 Tage über", "Laden"], ["Karton Suhrkamp", "1 Tag über", "Verlag"], ["Rechnung Müller", "heute", "Laden"], ["Schulbestellung", "4 Tage über", "Schule"]], []),
+          problems: sheet(["Quelle", "Sache"], [["Lieferkette", "Nachtzug, Verlag liefert nicht"], ["Server", "Shop langsam seit 6 Minuten"]], []),
+          social: sheet(["Kanal", "Reichweite"], [["Instagram", "12.100"], ["Facebook", "6.300"]], [1]),
+          conversion: sheet(["Stufe", "Anzahl"], [["Besuche", "1.240"], ["Reservierungen", "86"], ["Käufe", "52"]], [1]),
+          retention: sheet(["Kohorte", "Zweitkauf"], [["Juni", "28 %"], ["Juli", "33 %"], ["August", "31 %"]], [1]),
+          messages: sheet(["Konto", "Von", "Inhalt"], [["Laden", "Frau Kehl", "Ist der Nachtzug da?"], ["Verlag", "Suhrkamp", "Neuer Termin 28.10."], ["Intern", "Lena", "Bestand ist geprüft"]], []),
+          management: sheet(["Aufgabe", "Person", "Status"], [["Lagermeldung", "Lena", "Ausstehend"], ["Schaufenster", "Tim", "Angefangen"], ["Inventur Krimi", "Lena", "Ausstehend"], ["Kasse zählen", "Tim", "Beendet"]], []),
+          todo: sheet(["Feld", "Punkt"], [["Wichtig und dringend", "Verlag anrufen"], ["Wichtig und dringend", "Schulbestellung klären"], ["Wichtig und dringend", "Kassensturz"], ["Wichtig und nicht dringend", "Herbstprogramm"], ["Nicht wichtig und dringend", "Schaufensterfolie"], ["Nicht wichtig und nicht dringend", "Altbestand sichten"]], [])
+        }
+      },
+      software: {
+        company: "Nordkap",
+        tiles: {
+          finance: tile("finance", "Finance", "310.000 €", "Liquide Mittel", "−18.000 €", "down", "310.000 € liquide Mittel, 18.000 € unter dem Vormonat."),
+          tickets: tile("tickets", "Tickets & Probleme", "11", "Überfällige Fälle", "4 seit gestern", "", "11 Supportfälle sind über der Antwortfrist. 1 Problem ist kritisch: die API antwortet seit 40 Minuten mit Fehlern.", { value: "1", metric: "Kritisch und offen", delta: "API seit 40 Minuten", sign: "down" }),
+          social: tile("social", "Social Media", "62.000", "Reichweite, 7 Tage", "+6 %", "up", "Reichweite der letzten 7 Tage: 62.000, auf der LinkedIn-Seite."),
+          conversion: tile("conversion", "Conversion", "17 %", "Test zu zahlend", "+1 Punkt", "up", "17 % der Testkonten wurden zahlend. 31 von 180."),
+          retention: tile("retention", "Retention", "94 %", "Noch zahlend nach 90 Tagen", "−1 Punkt", "down", "94 % der zahlenden Kunden zahlen nach 90 Tagen noch."),
+          messages: tile("messages", "Nachrichten", "9", "Ungelesen", "3 Konten", "", "9 Nachrichten sind ungelesen."),
+          management: tile("management", "Management", "7", "Überfällige Aufgaben", "älteste 6 Tage", "", "7 delegierte Aufgaben sind über der Frist."),
+          todo: tile("todo", "To-do", "2", "Wichtig und dringend", "von 8 Punkten", "", "2 eigene Punkte sind wichtig und dringend.")
+        },
+        sheets: {
+          finance: sheet(["Posten", "Betrag"], [["Geschäftskonto", "310.000 €"], ["Löhne, diese Woche", "42.000 €"], ["Hosting, diese Woche", "1.800 €"]], [1]),
+          tickets: sheet(["Fall", "Frist", "Kanal"], [["Login, API-Fehler", "3 Stunden über", "Support"], ["Export bricht ab", "1 Tag über", "Support"], ["Rechnung Holm", "heute", "Firma"], ["Testkonto ohne Mail", "2 Tage über", "Support"]], []),
+          problems: sheet(["Quelle", "Sache"], [["Produkt", "API antwortet seit 40 Minuten mit Fehlern"]], []),
+          social: sheet(["Kanal", "Reichweite"], [["LinkedIn", "62.000"]], [1]),
+          conversion: sheet(["Stufe", "Anzahl"], [["Testkonten", "180"], ["Aktiviert", "96"], ["Zahlend", "31"]], [1]),
+          retention: sheet(["Kohorte", "Noch zahlend"], [["Juli", "96 %"], ["August", "94 %"], ["September", "94 %"]], [1]),
+          messages: sheet(["Konto", "Von", "Inhalt"], [["Support", "Kunde Holm", "Export bricht ab"], ["Firma", "Steuerbüro", "Lohnunterlagen"], ["Intern", "Mira", "Fix liegt auf Staging"]], []),
+          management: sheet(["Aufgabe", "Person", "Status"], [["API-Fix", "Mira", "Angefangen"], ["Kundeninfo Holm", "Jonas", "Ausstehend"], ["Lohn freigeben", "Jonas", "Ausstehend"], ["Staging prüfen", "Mira", "Beendet"]], []),
+          todo: sheet(["Feld", "Punkt"], [["Wichtig und dringend", "API-Lage entscheiden"], ["Wichtig und dringend", "Lohn freigeben"], ["Wichtig und nicht dringend", "Preisliste Q4"], ["Nicht wichtig und dringend", "Statusseite aktualisieren"]], [])
+        }
+      },
+      event: {
+        company: "Atelier Süd",
+        tiles: {
+          finance: tile("finance", "Finance", "96.500 €", "Liquide Mittel", "+8.400 €", "up", "96.500 € liquide Mittel, 8.400 € über dem Vormonat."),
+          tickets: tile("tickets", "Tickets & Probleme", "4", "Überfällige Fälle", "1 seit gestern", "", "4 Rückfragen sind über der Frist. 3 Probleme sind kritisch. Location und Licht betreffen diese Woche.", { value: "3", metric: "Kritisch und offen", delta: "2 betreffen diese Woche", sign: "" }),
+          social: tile("social", "Social Media", "41.000", "Reichweite, 7 Tage", "−4 %", "down", "Reichweite der letzten 7 Tage: 41.000."),
+          conversion: tile("conversion", "Conversion", "26 %", "Anfrage zu Mandat", "+2 Punkte", "up", "26 % der Anfragen wurden ein Mandat. 5 von 19."),
+          retention: tile("retention", "Retention", "48 %", "Folgemandat in 12 Monaten", "+3 Punkte", "up", "48 % der Auftraggeber haben in 12 Monaten ein weiteres Mandat erteilt."),
+          messages: tile("messages", "Nachrichten", "22", "Ungelesen", "3 Konten", "", "22 Nachrichten sind ungelesen."),
+          management: tile("management", "Management", "8", "Überfällige Aufgaben", "älteste 2 Tage", "", "8 delegierte Aufgaben sind über der Frist."),
+          todo: tile("todo", "To-do", "4", "Wichtig und dringend", "von 15 Punkten", "", "4 eigene Punkte sind wichtig und dringend.")
+        },
+        sheets: {
+          finance: sheet(["Posten", "Betrag"], [["Geschäftskonto", "96.500 €"], ["Offene Fremdkosten", "18.200 €"], ["Beauftragtes Honorar", "64.000 €"]], [1]),
+          tickets: sheet(["Fall", "Frist", "Kanal"], [["Location Hafen", "1 Tag über", "Auftraggeber"], ["Technikrider Linde", "heute", "Gewerk"], ["Gästeliste Körner", "2 Tage über", "Auftraggeber"], ["Anzahl Scheinwerfer", "heute", "Gewerk"]], []),
+          problems: sheet(["Quelle", "Sache"], [["Location", "Hafen sagt Donnerstag ab"], ["Technik", "Licht noch unbestätigt"], ["Personal", "Eine Schicht am Freitag offen"]], []),
+          social: sheet(["Kanal", "Reichweite"], [["Instagram", "28.000"], ["LinkedIn", "13.000"]], [1]),
+          conversion: sheet(["Stufe", "Anzahl"], [["Anfragen", "19"], ["Angebote", "11"], ["Mandate", "5"]], [1]),
+          retention: sheet(["Jahrgang", "Folgemandat"], [["2024", "44 %"], ["2025", "48 %"]], [1]),
+          messages: sheet(["Konto", "Von", "Inhalt"], [["Auftraggeber", "Linde", "Rider fehlt noch"], ["Gewerk", "Lichtwerk", "Zwei Scheinwerfer offen"], ["Intern", "Nora", "Schichtplan liegt bereit"]], []),
+          management: sheet(["Aufgabe", "Person", "Status"], [["Location ersetzen", "Nora", "Angefangen"], ["Licht bestätigen", "Paul", "Ausstehend"], ["Schicht Freitag", "Nora", "Ausstehend"], ["Rider an Linde", "Paul", "Beendet"]], []),
+          todo: sheet(["Feld", "Punkt"], [["Wichtig und dringend", "Location heute entscheiden"], ["Wichtig und dringend", "Licht freigeben"], ["Wichtig und dringend", "Schicht Freitag besetzen"], ["Wichtig und dringend", "Linde den Rider schicken"], ["Wichtig und nicht dringend", "Herbstmappe"]], [])
+        }
+      }
+    };
+
+    let pack = "buch";
+    let view = "home";
+    const messages = [];
+
+    const stage = document.getElementById("stage");
+    const thread = document.getElementById("thread");
+    const msg = document.getElementById("msg");
+    const sendBtn = document.getElementById("send");
+    const rail = document.getElementById("rail");
+    const backdrop = document.getElementById("backdrop");
+
+    function esc(value) {
+      return String(value).replace(/[&<>"']/g, (ch) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch]));
+    }
+
+    function dash() { return DATA[pack]; }
+
+    function heute(d) {
+      const todo = d.tiles.todo.value === "1" ? "1 Punkt ist wichtig und dringend." : d.tiles.todo.value + " Punkte sind wichtig und dringend.";
+      const tickets = d.tiles.tickets.value === "1" ? "1 Fall ist über der Frist." : d.tiles.tickets.value + " Fälle sind über der Frist.";
+      const problems = d.tiles.tickets.also.value === "1" ? "1 Problem ist kritisch." : d.tiles.tickets.also.value + " Probleme sind kritisch.";
+      return todo + " " + tickets + " " + problems;
+    }
+
+    function answerFor(text) {
+      const d = dash();
+      const q = text.toLowerCase();
+      const hit = (words) => words.some((word) => q.includes(word));
+      if (hit(["finanz", "geld", "liquid", "kasse", "konto"])) return d.tiles.finance.line;
+      if (hit(["ticket", "fall", "support", "frist", "problem", "störung", "liefer", "server", "api", "location"])) return d.tiles.tickets.line;
+      if (hit(["social", "reichweite", "instagram", "linkedin", "facebook"])) return d.tiles.social.line;
+      if (hit(["conversion", "abschluss", "kauf", "test", "anfrage", "mandat"])) return d.tiles.conversion.line;
+      if (hit(["retention", "bindung", "zweit", "folge"])) return d.tiles.retention.line;
+      if (hit(["nachricht", "mail", "ungelesen", "post"])) return d.tiles.messages.line;
+      if (hit(["management", "aufgabe", "team", "deleg"])) return d.tiles.management.line;
+      if (hit(["todo", "to-do", "eisenhower", "matrix", "wichtig"])) return d.tiles.todo.line;
+      if (view !== "home") return d.tiles[view].line;
+      return heute(d);
+    }
+
+    function renderNav() {
+      document.querySelectorAll(".nav-btn").forEach((link) => {
+        const id = link.getAttribute("href").slice(1);
+        if (id === view) link.setAttribute("aria-current", "page");
+        else link.removeAttribute("aria-current");
+      });
+      document.querySelectorAll("[data-pack]").forEach((button) => {
+        button.setAttribute("aria-selected", button.dataset.pack === pack ? "true" : "false");
+      });
+      document.getElementById("company").textContent = dash().company;
+      document.getElementById("top-company").textContent = dash().company;
+      const place = view === "home" ? "zum Unternehmen" : "zu " + dash().tiles[view].category;
+      msg.placeholder = "Nachricht " + place;
+    }
+
+    function metricBlock(item) {
+      const sign = item.sign ? " " + item.sign : "";
+      return '<span><span class="tile-value">' + esc(item.value) + "</span>" +
+        '<span class="tile-meta"><span>' + esc(item.metric) + '</span><span class="' + sign.trim() + '">' + esc(item.delta) + "</span></span></span>";
+    }
+
+    function renderTile(item) {
+      if (item.also) {
+        return '<a class="tile" href="#' + item.id + '">' +
+          '<span class="tile-cat">' + esc(item.category) + "</span>" +
+          '<span class="pair">' + metricBlock(item) + metricBlock(item.also) + "</span></a>";
+      }
+      return '<a class="tile" href="#' + item.id + '">' +
+        '<span class="tile-cat">' + esc(item.category) + "</span>" +
+        metricBlock(item) +
+        "</a>";
+    }
+
+    function tableHtml(table) {
+      const head = table.headers.map((header, index) => '<th class="' + (table.numeric.includes(index) ? "num" : "") + '">' + esc(header) + "</th>").join("");
+      const body = table.rows.map((row) => "<tr>" + row.map((cell, index) => '<td class="' + (table.numeric.includes(index) ? "num" : "") + '">' + esc(cell) + "</td>").join("") + "</tr>").join("");
+      return "<table><thead><tr>" + head + "</tr></thead><tbody>" + body + "</tbody></table>";
+    }
+
+    function renderSheet(item) {
+      const sign = item.sign ? " " + item.sign : "";
+      if (item.also) {
+        const alsoSign = item.also.sign ? " " + item.also.sign : "";
+        return '<article class="sheet"><p class="sheet-kicker">' + esc(GROUPS[item.id]) + "</p><h1>" + esc(item.category) + "</h1>" +
+          '<div class="pair"><span><p class="sheet-value">' + esc(item.value) + '</p><p class="sheet-metric">' + esc(item.metric) + ' · <span class="' + sign.trim() + '">' + esc(item.delta) + "</span></p></span>" +
+          '<span><p class="sheet-value">' + esc(item.also.value) + '</p><p class="sheet-metric">' + esc(item.also.metric) + ' · <span class="' + alsoSign.trim() + '">' + esc(item.also.delta) + "</span></p></span></div>" +
+          "<h2 class=\"sheet-kicker\">Tickets</h2>" + tableHtml(dash().sheets.tickets) +
+          "<h2 class=\"sheet-kicker\">Probleme</h2>" + tableHtml(dash().sheets.problems) +
+          "</article>";
+      }
+      return '<article class="sheet"><p class="sheet-kicker">' + esc(GROUPS[item.id]) + "</p><h1>" + esc(item.category) + "</h1>" +
+        '<p class="sheet-value">' + esc(item.value) + "</p>" +
+        '<p class="sheet-metric">' + esc(item.metric) + ' · <span class="' + sign.trim() + '">' + esc(item.delta) + "</span></p>" +
+        tableHtml(dash().sheets[item.id]) + "</article>";
+    }
+
+    function renderStage() {
+      const d = dash();
+      if (view === "home") {
+        stage.innerHTML = '<h1 class="sr">Übersicht</h1><div class="grid">' + ORDER.map((id) => renderTile(d.tiles[id])).join("") + "</div>";
+      } else {
+        stage.innerHTML = renderSheet(d.tiles[view]);
+      }
+      renderNav();
+    }
+
+    function renderThread() {
+      thread.innerHTML = messages.map((entry) => '<div class="msg-' + entry.role + '">' + esc(entry.text) + "</div>").join("");
+      thread.scrollTop = thread.scrollHeight;
+    }
+
+    function applyHash() {
+      let id = location.hash.slice(1);
+      if (id === "problems") id = "tickets";
+      view = id && dash().tiles[id] ? id : "home";
+      renderStage();
+      closeMenu();
+    }
+
+    function closeMenu() {
+      rail.classList.remove("open");
+      backdrop.classList.remove("show");
+    }
+
+    function submitText(text) {
+      const trimmed = text.trim();
+      if (!trimmed) return;
+      messages.push({ role: "user", text: trimmed });
+      messages.push({ role: "agent", text: answerFor(trimmed) });
+      msg.value = "";
+      fit();
+      sendBtn.disabled = true;
+      renderThread();
+    }
+
+    function fit() {
+      msg.style.height = "auto";
+      msg.style.height = Math.min(msg.scrollHeight, 110) + "px";
+    }
+
+    window.addEventListener("hashchange", applyHash);
+    document.addEventListener("click", (event) => {
+      const packBtn = event.target.closest("[data-pack]");
+      if (!packBtn) return;
+      pack = packBtn.dataset.pack;
+      messages.length = 0;
+      renderThread();
+      renderStage();
+    });
+
+    document.getElementById("menu").addEventListener("click", () => {
+      rail.classList.toggle("open");
+      backdrop.classList.toggle("show", rail.classList.contains("open"));
+    });
+    backdrop.addEventListener("click", closeMenu);
+
+    msg.addEventListener("input", () => {
+      sendBtn.disabled = msg.value.trim().length === 0;
+      fit();
+    });
+    msg.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" && !event.shiftKey) {
+        event.preventDefault();
+        submitText(msg.value);
+      }
+    });
+    document.getElementById("composer").addEventListener("submit", (event) => {
+      event.preventDefault();
+      submitText(msg.value);
+    });
+
+    const Mic = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const micBtn = document.getElementById("mic");
+    if (Mic) {
+      const rec = new Mic();
+      rec.lang = "de-DE";
+      rec.onresult = (event) => {
+        msg.value = event.results[0][0].transcript;
+        sendBtn.disabled = msg.value.trim().length === 0;
+        fit();
+        micBtn.setAttribute("aria-pressed", "false");
+      };
+      rec.onend = () => micBtn.setAttribute("aria-pressed", "false");
+      micBtn.addEventListener("click", () => {
+        if (micBtn.getAttribute("aria-pressed") === "true") {
+          rec.stop();
+          return;
+        }
+        micBtn.setAttribute("aria-pressed", "true");
+        rec.start();
+      });
+    } else {
+      micBtn.addEventListener("click", () => msg.focus());
+    }
+
+    applyHash();
+  </script>
+</body>
+</html>
