@@ -3,25 +3,25 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Lage · Founder</title>
+  <title>unc · Founder</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Permanent+Marker&display=swap">
   <style>
     /* C · Founder: shitposty, lowercase everything, stickers on graph paper, group chat */
     :root {
-      --paper: #fffaf0;
+      --paper: #fafafa;
       --ink: #111;
-      --muted: #6b665c;
-      --lime: #c6ff3d;
-      --orange: #ffb35c;
-      --pink: #ff9ad5;
-      --sky: #8fd3ff;
-      --lilac: #c9b6ff;
-      --yellow: #ffe14d;
-      --mint: #8ff0c0;
-      --coral: #ff8a7a;
-      --blue: #2f7bff;
+      --muted: #666666;
+      --lime: #81d8d0;
+      --orange: #c3c3c3;
+      --pink: #bababa;
+      --sky: #bfebe7;
+      --lilac: #c1c1c1;
+      --yellow: #e1e1e1;
+      --mint: #bfebe7;
+      --coral: #ababab;
+      --blue: #111111;
       --sans: "Bricolage Grotesque", system-ui, sans-serif;
       --marker: "Permanent Marker", "Comic Sans MS", cursive;
       color-scheme: light;
@@ -75,7 +75,7 @@
       color: var(--paper);
     }
     .brand-kicker { margin: 0; font: 400 38px/1 var(--marker); color: var(--lime); transform: rotate(-3deg); transform-origin: left; }
-    .brand-kicker span { display: block; margin-top: 6px; font: 600 12px var(--sans); color: rgba(255, 250, 240, 0.6); }
+    .brand-kicker span { display: block; margin-top: 6px; font: 600 12px var(--sans); color: rgba(250, 250, 250, 0.6); }
     .brand-name { margin: 14px 0 0; font-size: 17px; font-weight: 800; }
     .seg { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
     .seg button {
@@ -86,16 +86,16 @@
       font-size: 13px;
       font-weight: 700;
     }
-    .seg button:hover { background: rgba(255, 250, 240, 0.12); }
+    .seg button:hover { background: rgba(250, 250, 250, 0.12); }
     .seg button[aria-selected="true"] { background: var(--lime); border-color: var(--lime); color: var(--ink); transform: rotate(-2deg); }
 
     nav { display: flex; flex-direction: column; gap: 16px; }
     .group { display: flex; flex-direction: column; align-items: flex-start; gap: 1px; }
     .group-label { margin: 0 0 2px; font: 400 15px var(--marker); color: var(--pink); }
     .nav-btn { padding: 3px 6px; margin-left: -6px; font-size: 16px; font-weight: 700; border-radius: 6px; }
-    .nav-btn:hover { background: rgba(255, 250, 240, 0.12); }
+    .nav-btn:hover { background: rgba(250, 250, 250, 0.12); }
     .nav-btn[aria-current="page"] { background: var(--lime); color: var(--ink); transform: rotate(-1.5deg); }
-    .note { margin-top: auto; font-size: 12px; font-weight: 600; color: rgba(255, 250, 240, 0.5); }
+    .note { margin-top: auto; font-size: 12px; font-weight: 600; color: rgba(250, 250, 250, 0.5); }
 
     main { min-width: 0; min-height: 100vh; display: flex; flex-direction: column; }
     .ticker { overflow: hidden; background: var(--lime); border-bottom: 2.5px solid var(--ink); }
@@ -135,7 +135,7 @@
     }
 
     /* stickers */
-    .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px 22px; }
+    .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); grid-auto-flow: dense; gap: 24px 22px; }
     .sticker {
       container-type: inline-size;
       display: flex;
@@ -151,7 +151,39 @@
       transition: transform 140ms ease, box-shadow 140ms ease;
     }
     .sticker:hover { transform: rotate(0deg) translate(-2px, -2px); box-shadow: 8px 8px 0 var(--ink); }
-    .sticker[href="#tickets"] { grid-column: span 2; }
+    .sticker { position: relative; }
+    .sticker-l { grid-column: span 2; grid-row: span 2; }
+    .sticker-l .num { font-size: min(120px, 24cqi); }
+    .sticker-l .two .num { font-size: min(104px, 22cqi); }
+    .sticker-l .what { font-size: 16px; }
+    .sticker-l .mood { font-size: 28px; }
+    .sticker-m { grid-column: span 2; }
+    .two .what b { white-space: normal; }
+    .sticker-s .two { grid-template-columns: 1fr; gap: 10px; }
+    .sticker-s .two .num { font-size: min(46px, 19cqi); }
+    .stamp {
+      position: absolute;
+      top: -13px;
+      right: 14px;
+      padding: 2px 9px;
+      background: var(--ink);
+      color: var(--paper);
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 800;
+      white-space: nowrap;
+      font-variant-numeric: tabular-nums;
+      transform: rotate(4deg);
+    }
+    .sticker-l .stamp {
+      top: -18px;
+      padding: 4px 13px;
+      background: var(--lime);
+      color: var(--ink);
+      border: 2.5px solid var(--ink);
+      font-size: 19px;
+      transform: rotate(-5deg);
+    }
     .label {
       align-self: flex-start;
       padding: 3px 10px;
@@ -189,7 +221,7 @@
     }
     .back { display: inline-block; margin-bottom: 14px; font-size: 14px; font-weight: 700; text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 3px; }
     .sheet h1 { margin: 0; font-size: clamp(36px, 6vw, 56px); font-weight: 800; line-height: 1; letter-spacing: -0.04em; }
-    .scribble { margin: 10px 0 0; font: 400 26px var(--marker); color: #e0352b; transform: rotate(-2deg); transform-origin: left; }
+    .scribble { margin: 10px 0 0; font: 400 26px var(--marker); color: #111111; transform: rotate(-2deg); transform-origin: left; }
     .bigs { display: flex; flex-wrap: wrap; gap: 18px 40px; margin-top: 22px; }
     .big { padding: 12px 16px; background: var(--c); border: 2.5px solid var(--ink); border-radius: 16px; }
     .big .num { font-size: min(72px, 15cqi); }
@@ -218,9 +250,9 @@
     }
     .chat-head { display: flex; flex-direction: column; padding: 12px 16px; background: var(--ink); color: var(--paper); }
     .chat-head span { font-size: 17px; font-weight: 800; }
-    .chat-head small { font-size: 12px; font-weight: 600; color: rgba(255, 250, 240, 0.6); }
+    .chat-head small { font-size: 12px; font-weight: 600; color: rgba(250, 250, 250, 0.6); }
     .thread { flex: 1; display: flex; flex-direction: column; gap: 10px; overflow: auto; padding: 14px; }
-    .thread:empty::before { content: "ask me anything. cash, fires, clout, side quests."; font: 400 20px/1.2 var(--marker); color: #bdb7aa; transform: rotate(-1.5deg); }
+    .thread:empty::before { content: "ask me anything. cash, fires, clout, side quests."; font: 400 20px/1.2 var(--marker); color: #b7b7b7; transform: rotate(-1.5deg); }
     .msg-user, .msg-agent { max-width: 82%; padding: 8px 13px; border-radius: 18px; font-size: 14px; font-weight: 500; }
     .msg-user { align-self: flex-end; background: var(--blue); color: #fff; border-bottom-right-radius: 5px; }
     .msg-agent { align-self: flex-start; background: #ececee; border-bottom-left-radius: 5px; }
@@ -246,17 +278,17 @@
       min-height: 40px;
       font-weight: 600;
     }
-    textarea::placeholder { color: #9a958a; }
+    textarea::placeholder { color: #959595; }
     .icon-btn {
       width: 38px; height: 38px; flex: none;
       display: grid; place-items: center;
       border: 0; border-radius: 50%;
       background: transparent;
     }
-    .icon-btn:hover { background: #f1eee6; }
+    .icon-btn:hover { background: #eeeeee; }
     .icon-btn[aria-pressed="true"] { background: var(--coral); }
     #send { background: var(--lime); border: 2px solid var(--ink); }
-    #send:disabled { background: #e9e6de; border-color: #c9c4b8; color: #9a958a; }
+    #send:disabled { background: #e6e6e6; border-color: #c4c4c4; color: #959595; }
     .icon-btn svg { width: 16px; height: 16px; display: block; }
     .icon-btn svg path, .icon-btn svg rect { stroke-width: 2; }
 
@@ -266,7 +298,8 @@
       .workspace { grid-template-columns: minmax(0, 1fr) 300px; gap: 26px; }
       .stage { padding: 24px 22px 40px; }
       .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .sticker[href="#finance"] { grid-column: span 2; }
+      .sticker-l, .sticker-m { grid-column: span 2; }
+      .sticker-l { grid-row: auto; min-height: 260px; }
     }
     @media (max-width: 860px) {
       .app { grid-template-columns: 1fr; }
@@ -291,12 +324,15 @@
       .rail, .sticker { transition: none; }
     }
   </style>
+  <link rel="stylesheet" href="../brand.css">
+  <script src="../brand.js" defer></script>
+  <script src="../bridge.js" defer></script>
 </head>
-<body>
+<body data-versions>
   <div class="app">
     <aside class="rail" id="rail">
       <div class="brand">
-        <p class="brand-kicker">lage <span>(pre-seed energy)</span></p>
+        <p class="brand-kicker"><span class="unc-logo" data-unc="wordmark" style="--unc-h: 34px"></span><span>(pre-seed energy)</span></p>
         <p class="brand-name" id="company">Heft &amp; Bogen</p>
         <div class="seg" role="tablist" aria-label="Betrieb">
           <button type="button" role="tab" data-pack="buch" aria-selected="true">bookshop 📚</button>
@@ -327,20 +363,21 @@
         </div>
       </nav>
       <p class="note">fake data, real feelings</p>
+      <button class="om-sound" type="button" data-om-sound data-on="sound on 🔊" data-off="sound off 🔇" aria-pressed="false">sound off 🔇</button>
     </aside>
     <div class="backdrop" id="backdrop"></div>
     <main>
       <div class="ticker" aria-hidden="true"><div class="ticker-track" id="ticker"></div></div>
       <div class="topbar">
         <button class="menu-btn" type="button" id="menu">menu</button>
-        <strong id="top-company">Heft &amp; Bogen</strong>
+        <span class="unc-logo" data-unc="mark" style="--unc-h: 22px"></span><strong id="top-company">Heft &amp; Bogen</strong>
       </div>
       <div class="stage">
         <div class="workspace">
           <div class="frame" id="stage"></div>
           <aside class="chat-panel" aria-label="Chat">
             <div class="chat-head"><span>founders 🧃</span><small>3 members</small></div>
-            <div class="thread" id="thread" aria-live="polite"></div>
+            <div class="thread" id="thread" aria-live="polite" data-om-chime=".msg-agent"></div>
             <form class="composer" id="composer">
             <label class="sr" for="msg">Nachricht</label>
             <textarea id="msg" rows="1" placeholder="Nachricht schreiben"></textarea>
@@ -372,9 +409,12 @@
       return { headers, rows, numeric };
     }
 
+    // change: relative Veränderung je Bereich, bestimmt die Kachelgröße. Aus den Kacheln abgeleitet;
+    // für Nachrichten, Management und To-do sind die Vorwerte ausgedacht.
     const DATA = {
       buch: {
         company: "Heft & Bogen",
+        change: { finance: 0.052, tickets: 0.5, social: 0.12, conversion: -0.067, retention: 0.033, messages: 0.4, management: 0.25, todo: 0 },
         tiles: {
           finance: tile("finance", "Finance", "42.800 €", "Liquide Mittel", "+2.100 €", "up", "42.800 € liquide Mittel, 2.100 € über dem Vormonat."),
           tickets: tile("tickets", "Tickets & Probleme", "6", "Überfällige Fälle", "2 seit gestern", "", "6 Fälle sind über der Frist. 2 Probleme sind kritisch. Eines ist der fehlende Nachtzug.", { value: "2", metric: "Kritisch und offen", delta: "1 in der Lieferkette", sign: "" }),
@@ -399,6 +439,7 @@
       },
       software: {
         company: "Nordkap",
+        change: { finance: -0.055, tickets: 0.571, social: 0.06, conversion: 0.063, retention: -0.011, messages: -0.25, management: 0.4, todo: -0.333 },
         tiles: {
           finance: tile("finance", "Finance", "310.000 €", "Liquide Mittel", "−18.000 €", "down", "310.000 € liquide Mittel, 18.000 € unter dem Vormonat."),
           tickets: tile("tickets", "Tickets & Probleme", "11", "Überfällige Fälle", "4 seit gestern", "", "11 Supportfälle sind über der Antwortfrist. 1 Problem ist kritisch: die API antwortet seit 40 Minuten mit Fehlern.", { value: "1", metric: "Kritisch und offen", delta: "API seit 40 Minuten", sign: "down" }),
@@ -423,6 +464,7 @@
       },
       event: {
         company: "Atelier Süd",
+        change: { finance: 0.095, tickets: 0.333, social: -0.04, conversion: 0.083, retention: 0.067, messages: 0.467, management: 0, todo: 1 },
         tiles: {
           finance: tile("finance", "Finance", "96.500 €", "Liquide Mittel", "+8.400 €", "up", "96.500 € liquide Mittel, 8.400 € über dem Vormonat."),
           tickets: tile("tickets", "Tickets & Probleme", "4", "Überfällige Fälle", "1 seit gestern", "", "4 Rückfragen sind über der Frist. 3 Probleme sind kritisch. Location und Licht betreffen diese Woche.", { value: "3", metric: "Kritisch und offen", delta: "2 betreffen diese Woche", sign: "" }),
@@ -549,11 +591,21 @@
         '<span class="what">' + esc(item.metric) + (item.delta ? ' <b class="' + (item.sign || "") + '">' + esc(item.delta) + "</b>" : "") + "</span>";
     }
 
-    function renderTile(item, index) {
+    // +50 % 📈, −6,7 % 📉, ±0 % 😴
+    function stamp(change) {
+      if (change === 0) return "±0 % 😴";
+      const abs = Math.abs(change * 100);
+      return (change > 0 ? "+" : "−") + String(abs >= 10 ? Math.round(abs) : abs.toFixed(1)).replace(".", ",") + (change > 0 ? " % 📈" : " % 📉");
+    }
+
+    // index is the rank by change: 0 is the main character, 1 runs wide
+    function renderTile(item, index, change) {
       const s = SLANG[item.id];
+      const size = index === 0 ? " sticker-l" : index === 1 ? " sticker-m" : " sticker-s";
       const body = item.also ? '<span class="two"><span>' + nums(item) + "</span><span>" + nums(item.also) + "</span></span>" : nums(item);
-      return '<a class="sticker c-' + s.color + '" href="#' + item.id + '" style="--tilt: ' + TILTS[index % TILTS.length] + 'deg">' +
-        '<span class="label">' + s.emoji + " " + esc(s.name) + "</span>" + body +
+      return '<a class="sticker c-' + s.color + size + '" href="#' + item.id + '" style="--tilt: ' + TILTS[index % TILTS.length] + 'deg">' +
+        '<span class="stamp">' + stamp(change) + "</span>" +
+        '<span class="label">' + s.emoji + " " + esc(s.name) + (index === 0 ? " · main character ✨" : "") + "</span>" + body +
         '<span class="mood">' + esc(mood(item)) + "</span></a>";
     }
 
@@ -584,7 +636,8 @@
       const downs = ORDER.filter((id) => d.tiles[id].sign === "down").length;
       const status = ups > downs ? "lowkey cooking 🍳" : "it's giving pivot 😬";
       return '<h1 class="hey">gm, ' + esc(d.company) + ' 👋</h1><p class="sub">status: ' + status + "</p>" +
-        '<div class="grid">' + ORDER.map((id, index) => renderTile(d.tiles[id], index)).join("") + "</div>";
+        '<div class="grid">' + ORDER.slice().sort((a, b) => Math.abs(d.change[b]) - Math.abs(d.change[a]))
+          .map((id, index) => renderTile(d.tiles[id], index, d.change[id])).join("") + "</div>";
     }
 
     function renderStage() {

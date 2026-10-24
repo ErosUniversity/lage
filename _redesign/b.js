@@ -46,11 +46,26 @@
         spark(item) + "</a>";
     }
 
-    function renderRow(item) {
+    // +50 %, −6,7 %, ±0 %
+    function pct(change) {
+      if (change === 0) return "±0 %";
+      const abs = Math.abs(change * 100);
+      return (change > 0 ? "+" : "−") + String(abs >= 10 ? Math.round(abs) : abs.toFixed(1)).replace(".", ",") + " %";
+    }
+
+    // bar length is the change relative to the biggest mover in the list
+    function moveBar(change, max) {
+      const width = max ? Math.max(3, Math.round((Math.abs(change) / max) * 100)) : 3;
+      return '<span class="move"><span class="move-track"><span class="move-bar" style="width: ' + width + '%"></span></span>' +
+        '<span class="move-pct">' + pct(change) + "</span></span>";
+    }
+
+    function renderRow(item, size, change, max) {
       const sub = item.also ? item.metric + " · " + item.also.value + " " + item.also.metric : item.metric;
-      return '<a class="row" href="#' + item.id + '">' +
+      return '<a class="row row-' + size + '" href="#' + item.id + '">' +
         '<span class="row-icon" aria-hidden="true">' + esc(item.category.charAt(0)) + "</span>" +
-        '<span class="row-main"><span class="row-name">' + esc(item.category) + '</span><span class="row-sub">' + esc(sub) + "</span></span>" +
+        '<span class="row-main"><span class="row-name">' + esc(item.category) + '</span><span class="row-sub">' + esc(sub) + "</span>" +
+        moveBar(change, max) + "</span>" +
         '<span class="row-end"><span class="row-value">' + esc(item.value) + "</span>" + deltaChip(item) + "</span></a>";
     }
 
@@ -76,12 +91,14 @@
       return out + "</article>";
     }
 
+    // finance stays the hero; the other positions are sorted and sized by how much they moved
     function renderHome(d) {
+      const ids = ORDER.filter((id) => id !== "finance").sort((a, b) => Math.abs(d.change[b]) - Math.abs(d.change[a]));
+      const max = Math.abs(d.change[ids[0]]);
+      const size = (rank) => (rank < 2 ? "l" : rank < 4 ? "m" : "s");
       return '<h1 class="sr">Übersicht</h1>' + renderHero(d.tiles.finance) +
-        ["Lage", "Wachstum", "Handeln"].map((group) => {
-          const rows = ORDER.filter((id) => id !== "finance" && GROUPS[id] === group).map((id) => renderRow(d.tiles[id])).join("");
-          return '<section class="list"><h2>' + esc(group) + "</h2>" + rows + "</section>";
-        }).join("");
+        '<section class="list"><h2>Größte Bewegung</h2>' +
+        ids.map((id, rank) => renderRow(d.tiles[id], size(rank), d.change[id], max)).join("") + "</section>";
     }
 
     function renderStage() {

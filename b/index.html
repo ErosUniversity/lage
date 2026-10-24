@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Lage · Tech</title>
+  <title>unc · Tech</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
@@ -14,12 +14,12 @@
       --surface: #0f0f10;
       --chip: #1b1b1d;
       --text: #fff;
-      --muted: #8d8d93;
-      --line: #1f1f23;
-      --good: #34c759;
-      --good-bg: rgba(52, 199, 89, 0.14);
-      --bad: #ff453a;
-      --bad-bg: rgba(255, 69, 58, 0.14);
+      --muted: #8d8d8d;
+      --line: #1f1f1f;
+      --good: #81d8d0;
+      --good-bg: rgba(129, 216, 208, 0.14);
+      --bad: #8b8b8b;
+      --bad-bg: rgba(139, 139, 139, 0.14);
       --sans: "Inter", system-ui, -apple-system, sans-serif;
       color-scheme: dark;
     }
@@ -28,12 +28,12 @@
       --surface: #f5f5f7;
       --chip: #efeff2;
       --text: #000;
-      --muted: #6e6e73;
-      --line: #e6e6ea;
-      --good: #12a150;
-      --good-bg: rgba(18, 161, 80, 0.1);
-      --bad: #de3a2f;
-      --bad-bg: rgba(222, 58, 47, 0.1);
+      --muted: #6e6e6e;
+      --line: #e6e6e6;
+      --good: #0f766e;
+      --good-bg: rgba(15, 118, 110, 0.1);
+      --bad: #787878;
+      --bad-bg: rgba(120, 120, 120, 0.1);
       color-scheme: light;
     }
 
@@ -185,6 +185,21 @@
     .row-value { font-size: 16px; font-weight: 600; white-space: nowrap; }
     .row .delta { padding: 0; background: none; font-size: 13px; }
     .row .delta.flat { background: none; }
+    .row-l { padding-top: 18px; padding-bottom: 18px; grid-template-columns: 56px minmax(0, 1fr) auto; }
+    .row-l .row-icon { width: 56px; height: 56px; font-size: 22px; }
+    .row-l .row-name { font-size: 19px; }
+    .row-l .row-value { font-size: 28px; font-weight: 700; letter-spacing: -0.03em; }
+    .row-s { padding-top: 8px; padding-bottom: 8px; grid-template-columns: 32px minmax(0, 1fr) auto; }
+    .row-s .row-icon { width: 32px; height: 32px; font-size: 12px; }
+    .row-s .row-name { font-size: 14px; }
+    .row-s .row-sub { font-size: 12px; }
+    .row-s .row-value { font-size: 14px; }
+    .move { display: flex; align-items: center; gap: 8px; margin-top: 7px; max-width: 220px; }
+    .move-track { flex: 1; height: 4px; border-radius: 4px; background: var(--chip); overflow: hidden; }
+    .move-bar { display: block; height: 100%; border-radius: 4px; background: var(--text); }
+    .move-pct { font-size: 12px; font-weight: 600; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+    .row-s .move { margin-top: 5px; }
+    .row-s .move-track { height: 3px; }
 
     /* detail */
     .back { display: inline-block; margin-bottom: 22px; font-size: 14px; font-weight: 500; color: var(--muted); }
@@ -282,12 +297,15 @@
       .rail { transition: none; }
     }
   </style>
+  <link rel="stylesheet" href="../brand.css">
+  <script src="../brand.js" defer></script>
+  <script src="../bridge.js" defer></script>
 </head>
-<body>
+<body data-versions>
   <div class="app">
     <aside class="rail" id="rail">
       <div class="brand">
-        <p class="brand-kicker">Lage</p>
+        <p class="brand-kicker"><span class="unc-logo" data-unc="wordmark" style="--unc-h: 22px; color: var(--ink, var(--text))"></span></p>
         <p class="brand-name" id="company">Heft &amp; Bogen</p>
         <div class="seg" role="tablist" aria-label="Betrieb">
           <button type="button" role="tab" data-pack="buch" aria-selected="true">Buchladen</button>
@@ -318,19 +336,20 @@
         </div>
       </nav>
       <div class="rail-foot"><button type="button" class="theme-btn" id="theme" aria-pressed="false">Hell</button><p class="note">Beispieldaten</p></div>
+      <button class="om-sound" type="button" data-om-sound data-on="Klang an" data-off="Klang aus" aria-pressed="false">Klang aus</button>
     </aside>
     <div class="backdrop" id="backdrop"></div>
     <main>
       <div class="topbar">
         <button class="menu-btn" type="button" id="menu">Menü</button>
-        <strong id="top-company">Heft &amp; Bogen</strong>
+        <span class="unc-logo" data-unc="mark" style="--unc-h: 22px"></span><strong id="top-company">Heft &amp; Bogen</strong>
       </div>
       <div class="stage">
         <div class="workspace">
           <div class="frame" id="stage"></div>
           <aside class="chat-panel" aria-label="Chat">
             <div class="chat-head">Chat</div>
-            <div class="thread" id="thread" aria-live="polite"></div>
+            <div class="thread" id="thread" aria-live="polite" data-om-chime=".msg-agent"></div>
             <form class="composer" id="composer">
             <label class="sr" for="msg">Nachricht</label>
             <textarea id="msg" rows="1" placeholder="Nachricht schreiben"></textarea>
@@ -362,9 +381,12 @@
       return { headers, rows, numeric };
     }
 
+    // change: relative Veränderung je Bereich, bestimmt die Kachelgröße. Aus den Kacheln abgeleitet;
+    // für Nachrichten, Management und To-do sind die Vorwerte ausgedacht.
     const DATA = {
       buch: {
         company: "Heft & Bogen",
+        change: { finance: 0.052, tickets: 0.5, social: 0.12, conversion: -0.067, retention: 0.033, messages: 0.4, management: 0.25, todo: 0 },
         tiles: {
           finance: tile("finance", "Finance", "42.800 €", "Liquide Mittel", "+2.100 €", "up", "42.800 € liquide Mittel, 2.100 € über dem Vormonat."),
           tickets: tile("tickets", "Tickets & Probleme", "6", "Überfällige Fälle", "2 seit gestern", "", "6 Fälle sind über der Frist. 2 Probleme sind kritisch. Eines ist der fehlende Nachtzug.", { value: "2", metric: "Kritisch und offen", delta: "1 in der Lieferkette", sign: "" }),
@@ -389,6 +411,7 @@
       },
       software: {
         company: "Nordkap",
+        change: { finance: -0.055, tickets: 0.571, social: 0.06, conversion: 0.063, retention: -0.011, messages: -0.25, management: 0.4, todo: -0.333 },
         tiles: {
           finance: tile("finance", "Finance", "310.000 €", "Liquide Mittel", "−18.000 €", "down", "310.000 € liquide Mittel, 18.000 € unter dem Vormonat."),
           tickets: tile("tickets", "Tickets & Probleme", "11", "Überfällige Fälle", "4 seit gestern", "", "11 Supportfälle sind über der Antwortfrist. 1 Problem ist kritisch: die API antwortet seit 40 Minuten mit Fehlern.", { value: "1", metric: "Kritisch und offen", delta: "API seit 40 Minuten", sign: "down" }),
@@ -413,6 +436,7 @@
       },
       event: {
         company: "Atelier Süd",
+        change: { finance: 0.095, tickets: 0.333, social: -0.04, conversion: 0.083, retention: 0.067, messages: 0.467, management: 0, todo: 1 },
         tiles: {
           finance: tile("finance", "Finance", "96.500 €", "Liquide Mittel", "+8.400 €", "up", "96.500 € liquide Mittel, 8.400 € über dem Vormonat."),
           tickets: tile("tickets", "Tickets & Probleme", "4", "Überfällige Fälle", "1 seit gestern", "", "4 Rückfragen sind über der Frist. 3 Probleme sind kritisch. Location und Licht betreffen diese Woche.", { value: "3", metric: "Kritisch und offen", delta: "2 betreffen diese Woche", sign: "" }),
@@ -525,11 +549,26 @@
         spark(item) + "</a>";
     }
 
-    function renderRow(item) {
+    // +50 %, −6,7 %, ±0 %
+    function pct(change) {
+      if (change === 0) return "±0 %";
+      const abs = Math.abs(change * 100);
+      return (change > 0 ? "+" : "−") + String(abs >= 10 ? Math.round(abs) : abs.toFixed(1)).replace(".", ",") + " %";
+    }
+
+    // bar length is the change relative to the biggest mover in the list
+    function moveBar(change, max) {
+      const width = max ? Math.max(3, Math.round((Math.abs(change) / max) * 100)) : 3;
+      return '<span class="move"><span class="move-track"><span class="move-bar" style="width: ' + width + '%"></span></span>' +
+        '<span class="move-pct">' + pct(change) + "</span></span>";
+    }
+
+    function renderRow(item, size, change, max) {
       const sub = item.also ? item.metric + " · " + item.also.value + " " + item.also.metric : item.metric;
-      return '<a class="row" href="#' + item.id + '">' +
+      return '<a class="row row-' + size + '" href="#' + item.id + '">' +
         '<span class="row-icon" aria-hidden="true">' + esc(item.category.charAt(0)) + "</span>" +
-        '<span class="row-main"><span class="row-name">' + esc(item.category) + '</span><span class="row-sub">' + esc(sub) + "</span></span>" +
+        '<span class="row-main"><span class="row-name">' + esc(item.category) + '</span><span class="row-sub">' + esc(sub) + "</span>" +
+        moveBar(change, max) + "</span>" +
         '<span class="row-end"><span class="row-value">' + esc(item.value) + "</span>" + deltaChip(item) + "</span></a>";
     }
 
@@ -555,12 +594,14 @@
       return out + "</article>";
     }
 
+    // finance stays the hero; the other positions are sorted and sized by how much they moved
     function renderHome(d) {
+      const ids = ORDER.filter((id) => id !== "finance").sort((a, b) => Math.abs(d.change[b]) - Math.abs(d.change[a]));
+      const max = Math.abs(d.change[ids[0]]);
+      const size = (rank) => (rank < 2 ? "l" : rank < 4 ? "m" : "s");
       return '<h1 class="sr">Übersicht</h1>' + renderHero(d.tiles.finance) +
-        ["Lage", "Wachstum", "Handeln"].map((group) => {
-          const rows = ORDER.filter((id) => id !== "finance" && GROUPS[id] === group).map((id) => renderRow(d.tiles[id])).join("");
-          return '<section class="list"><h2>' + esc(group) + "</h2>" + rows + "</section>";
-        }).join("");
+        '<section class="list"><h2>Größte Bewegung</h2>' +
+        ids.map((id, rank) => renderRow(d.tiles[id], size(rank), d.change[id], max)).join("") + "</section>";
     }
 
     function renderStage() {

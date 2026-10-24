@@ -3,20 +3,20 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Lage</title>
+  <title>unc</title>
   <style>
     :root {
-      --bg: #e8e2d8;
-      --rail: #f3efe8;
-      --paper: #f7f4ee;
-      --card: #fffcf8;
+      --bg: #e3e3e3;
+      --rail: #efefef;
+      --paper: #f4f4f4;
+      --card: #fcfcfc;
       --ink: #1c1b19;
-      --muted: #6f6a62;
-      --faint: #8a847b;
-      --line: #ddd6cb;
-      --line-strong: #c9c1b4;
-      --good: #1d6b43;
-      --bad: #9a4034;
+      --muted: #6b6b6b;
+      --faint: #858585;
+      --line: #d7d7d7;
+      --line-strong: #c2c2c2;
+      --good: #0f766e;
+      --bad: #5c5c5c;
       --radius: 16px;
       --sans: "SF Pro Text", "SF Pro Display", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
@@ -87,7 +87,7 @@
       gap: 2px;
       padding: 2px;
       margin-top: 12px;
-      background: #e6e0d6;
+      background: #e1e1e1;
       border-radius: 10px;
     }
     .seg button {
@@ -173,7 +173,9 @@
 
     .grid {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      grid-auto-rows: minmax(150px, auto);
+      grid-auto-flow: dense;
       gap: 12px;
     }
     .tile {
@@ -222,6 +224,31 @@
       align-items: flex-start;
       gap: 2px;
     }
+    .tile-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 8px;
+    }
+    .tile-change {
+      flex: none;
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: rgba(28, 27, 25, 0.06);
+      font-size: 12px;
+      color: var(--muted);
+      font-variant-numeric: tabular-nums;
+    }
+    .tile-l { grid-column: span 2; grid-row: span 2; }
+    .tile-l .tile-value { font-size: 52px; }
+    .tile-m { grid-column: span 2; }
+    .tile-s { padding: 14px 14px 12px; }
+    .tile-s .tile-cat { font-size: 14px; }
+    .tile-s .tile-head { flex-wrap: wrap; row-gap: 4px; }
+    .tile-s .tile-value { margin-top: 18px; font-size: 24px; }
+    .tile-s .tile-meta { flex-direction: column; gap: 2px; font-size: 12px; }
+    .tile-s .pair { grid-template-columns: 1fr; gap: 8px; margin-top: 12px; }
+    .tile-s .pair .tile-value { font-size: 22px; }
     .up { color: var(--good); }
     .down { color: var(--bad); }
 
@@ -297,7 +324,7 @@
     .msg-user {
       align-self: flex-end;
       max-width: 72%;
-      background: #e7e1d7;
+      background: #e2e2e2;
       border-radius: 16px;
       padding: 8px 12px;
     }
@@ -352,6 +379,11 @@
       display: none;
     }
 
+    @media (max-width: 1240px) {
+      .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .tile-l, .tile-m { grid-column: span 2; grid-row: auto; }
+      .tile-l { min-height: 220px; }
+    }
     @media (max-width: 860px) {
       .app { grid-template-columns: 1fr; }
       .topbar { display: flex; }
@@ -376,18 +408,23 @@
       .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .tile { min-height: 132px; }
       .tile-value { margin-top: 16px; font-size: 28px; }
+      .tile-l { min-height: 200px; }
+      .tile-l .tile-value { font-size: 40px; }
       .sheet-value { font-size: 36px; }
     }
     @media (prefers-reduced-motion: reduce) {
       .rail { transition: none; }
     }
   </style>
+  <link rel="stylesheet" href="brand.css">
+  <script src="brand.js" defer></script>
+  <script src="bridge.js" defer></script>
 </head>
-<body>
+<body data-versions>
   <div class="app">
     <aside class="rail" id="rail">
       <div class="brand">
-        <p class="brand-kicker">Lage</p>
+        <p class="brand-kicker"><span class="unc-logo" data-unc="wordmark" style="--unc-h: 22px; color: var(--ink, var(--text))"></span></p>
         <p class="brand-name" id="company">Heft &amp; Bogen</p>
         <div class="seg" role="tablist" aria-label="Betrieb">
           <button type="button" role="tab" data-pack="buch" aria-selected="true">Buchladen</button>
@@ -418,19 +455,20 @@
         </div>
       </nav>
       <p class="note">Beispieldaten</p>
+      <button class="om-sound" type="button" data-om-sound data-on="Klang an" data-off="Klang aus" aria-pressed="false">Klang aus</button>
     </aside>
     <div class="backdrop" id="backdrop"></div>
     <main>
       <div class="topbar">
         <button class="menu-btn" type="button" id="menu">Menü</button>
-        <strong id="top-company">Heft &amp; Bogen</strong>
+        <span class="unc-logo" data-unc="mark" style="--unc-h: 22px"></span><strong id="top-company">Heft &amp; Bogen</strong>
       </div>
       <div class="stage">
         <div class="workspace">
           <div class="frame" id="stage"></div>
           <aside class="chat-panel" aria-label="Chat">
             <div class="chat-head">Chat</div>
-            <div class="thread" id="thread" aria-live="polite"></div>
+            <div class="thread" id="thread" aria-live="polite" data-om-chime=".msg-agent"></div>
             <form class="composer" id="composer">
             <label class="sr" for="msg">Nachricht</label>
             <textarea id="msg" rows="1" placeholder="Nachricht schreiben"></textarea>
@@ -462,9 +500,12 @@
       return { headers, rows, numeric };
     }
 
+    // change: relative Veränderung je Bereich, bestimmt die Kachelgröße. Aus den Kacheln abgeleitet;
+    // für Nachrichten, Management und To-do sind die Vorwerte ausgedacht.
     const DATA = {
       buch: {
         company: "Heft & Bogen",
+        change: { finance: 0.052, tickets: 0.5, social: 0.12, conversion: -0.067, retention: 0.033, messages: 0.4, management: 0.25, todo: 0 },
         tiles: {
           finance: tile("finance", "Finance", "42.800 €", "Liquide Mittel", "+2.100 €", "up", "42.800 € liquide Mittel, 2.100 € über dem Vormonat."),
           tickets: tile("tickets", "Tickets & Probleme", "6", "Überfällige Fälle", "2 seit gestern", "", "6 Fälle sind über der Frist. 2 Probleme sind kritisch. Eines ist der fehlende Nachtzug.", { value: "2", metric: "Kritisch und offen", delta: "1 in der Lieferkette", sign: "" }),
@@ -489,6 +530,7 @@
       },
       software: {
         company: "Nordkap",
+        change: { finance: -0.055, tickets: 0.571, social: 0.06, conversion: 0.063, retention: -0.011, messages: -0.25, management: 0.4, todo: -0.333 },
         tiles: {
           finance: tile("finance", "Finance", "310.000 €", "Liquide Mittel", "−18.000 €", "down", "310.000 € liquide Mittel, 18.000 € unter dem Vormonat."),
           tickets: tile("tickets", "Tickets & Probleme", "11", "Überfällige Fälle", "4 seit gestern", "", "11 Supportfälle sind über der Antwortfrist. 1 Problem ist kritisch: die API antwortet seit 40 Minuten mit Fehlern.", { value: "1", metric: "Kritisch und offen", delta: "API seit 40 Minuten", sign: "down" }),
@@ -513,6 +555,7 @@
       },
       event: {
         company: "Atelier Süd",
+        change: { finance: 0.095, tickets: 0.333, social: -0.04, conversion: 0.083, retention: 0.067, messages: 0.467, management: 0, todo: 1 },
         tiles: {
           finance: tile("finance", "Finance", "96.500 €", "Liquide Mittel", "+8.400 €", "up", "96.500 € liquide Mittel, 8.400 € über dem Vormonat."),
           tickets: tile("tickets", "Tickets & Probleme", "4", "Überfällige Fälle", "1 seit gestern", "", "4 Rückfragen sind über der Frist. 3 Probleme sind kritisch. Location und Licht betreffen diese Woche.", { value: "3", metric: "Kritisch und offen", delta: "2 betreffen diese Woche", sign: "" }),
@@ -598,14 +641,21 @@
         '<span class="tile-meta"><span>' + esc(item.metric) + '</span><span class="' + sign.trim() + '">' + esc(item.delta) + "</span></span></span>";
     }
 
-    function renderTile(item) {
+    function pct(change) {
+      if (change === 0) return "±0 %";
+      const abs = Math.abs(change * 100);
+      const text = String(abs >= 10 ? Math.round(abs) : abs.toFixed(1)).replace(".", ",");
+      return (change > 0 ? "+" : "−") + text + " %";
+    }
+
+    function renderTile(item, size, change) {
+      const head = '<span class="tile-head"><span class="tile-cat">' + esc(item.category) + "</span>" +
+        '<span class="tile-change">' + pct(change) + "</span></span>";
       if (item.also) {
-        return '<a class="tile" href="#' + item.id + '">' +
-          '<span class="tile-cat">' + esc(item.category) + "</span>" +
+        return '<a class="tile tile-' + size + '" href="#' + item.id + '">' + head +
           '<span class="pair">' + metricBlock(item) + metricBlock(item.also) + "</span></a>";
       }
-      return '<a class="tile" href="#' + item.id + '">' +
-        '<span class="tile-cat">' + esc(item.category) + "</span>" +
+      return '<a class="tile tile-' + size + '" href="#' + item.id + '">' + head +
         metricBlock(item) +
         "</a>";
     }
@@ -636,7 +686,10 @@
     function renderStage() {
       const d = dash();
       if (view === "home") {
-        stage.innerHTML = '<h1 class="sr">Übersicht</h1><div class="grid">' + ORDER.map((id) => renderTile(d.tiles[id])).join("") + "</div>";
+        const ranked = ORDER.slice().sort((a, b) => Math.abs(d.change[b]) - Math.abs(d.change[a]));
+        const size = (rank) => (rank < 2 ? "l" : rank < 4 ? "m" : "s");
+        stage.innerHTML = '<h1 class="sr">Übersicht</h1><div class="grid">' +
+          ranked.map((id, rank) => renderTile(d.tiles[id], size(rank), d.change[id])).join("") + "</div>";
       } else {
         stage.innerHTML = renderSheet(d.tiles[view]);
       }

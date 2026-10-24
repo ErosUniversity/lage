@@ -45,7 +45,10 @@ VERSIONS = {
         "name": "Founder",
         "fonts": "Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Permanent+Marker",
         "replace": [
-            ('<p class="brand-kicker">Lage</p>', '<p class="brand-kicker">lage <span>(pre-seed energy)</span></p>'),
+            ('<p class="brand-kicker"><span class="unc-logo" data-unc="wordmark" style="--unc-h: 22px; color: var(--ink, var(--text))"></span></p>',
+             '<p class="brand-kicker"><span class="unc-logo" data-unc="wordmark" style="--unc-h: 34px"></span><span>(pre-seed energy)</span></p>'),
+            ('data-on="Klang an" data-off="Klang aus" aria-pressed="false">Klang aus</button>',
+             'data-on="sound on 🔊" data-off="sound off 🔇" aria-pressed="false">sound off 🔇</button>'),
             ('aria-selected="true">Buchladen</button>', 'aria-selected="true">bookshop 📚</button>'),
             ('aria-selected="false">Software</button>', 'aria-selected="false">saas 💻</button>'),
             ('aria-selected="false">Event</button>', 'aria-selected="false">events 🪩</button>'),
@@ -81,12 +84,13 @@ for key, v in VERSIONS.items():
         "  <style>\n" + css + "  </style>"
     )
     page = re.sub(r"<style>.*?</style>", lambda _: head, base, count=1, flags=re.S)
-    page = page.replace("<title>Lage</title>", f'<title>Lage · {v["name"]}</title>', 1)
+    page = page.replace("<title>unc</title>", f'<title>unc · {v["name"]}</title>', 1)
     a, b = page.index(JS_START), page.index(JS_END)
     page = page[:a] + js.rstrip("\n") + "\n\n" + page[b:]
     for old, new in v["replace"]:
         assert page.count(old) == 1, f"{key}: {old!r} found {page.count(old)} times"
         page = page.replace(old, new)
+    page = page.replace('href="brand.css"', 'href="../brand.css"').replace('src="brand.js"', 'src="../brand.js"').replace('src="bridge.js"', 'src="../bridge.js"')
     out = ROOT / key / "index.html"
     out.parent.mkdir(exist_ok=True)
     out.write_text(page)
