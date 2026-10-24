@@ -45,8 +45,8 @@ VERSIONS = {
         "name": "Founder",
         "fonts": "Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Permanent+Marker",
         "replace": [
-            ('<p class="brand-kicker"><span class="om-mark" aria-hidden="true">ॐ</span>Lage</p>',
-             '<p class="brand-kicker"><span class="om-mark" aria-hidden="true" style="--om-size: 0.5em">ॐ</span>lage <span>(pre-seed energy)</span></p>'),
+            ('<p class="brand-kicker"><span class="om-mark" aria-hidden="true" style="--om-size: 2em">ॐ</span>Lage</p>',
+             '<p class="brand-kicker"><span class="om-mark" aria-hidden="true" style="--om-size: 0.75em">ॐ</span>lage <span>(pre-seed energy)</span></p>'),
             ('data-on="Klang an" data-off="Klang aus" aria-pressed="false">Klang aus</button>',
              'data-on="sound on 🔊" data-off="sound off 🔇" aria-pressed="false">sound off 🔇</button>'),
             ('aria-selected="true">Buchladen</button>', 'aria-selected="true">bookshop 📚</button>'),
